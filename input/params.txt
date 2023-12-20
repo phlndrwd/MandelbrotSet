@@ -1,0 +1,10 @@
+maxIter,40
+width,10000
+height,10000
+xMin,-2
+xMax,1
+yMin,-1.5
+yMax,1.5
+colourMapOption,greyscale
+colourInvert,0
+imagePath,/home/h02/punderwo/Development/MandelbrotSet/image.ppm
