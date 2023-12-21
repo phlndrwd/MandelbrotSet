@@ -6,8 +6,7 @@
 class Colour {
 public:
   Colour();
-  Colour(unsigned char);
-  Colour(unsigned char, unsigned char, unsigned char);
+  explicit Colour(unsigned char, unsigned char, unsigned char);
 
   Colour invert();
 

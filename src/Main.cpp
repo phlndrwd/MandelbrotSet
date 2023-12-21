@@ -6,8 +6,9 @@
 #include <string>
 #include <vector>
 
-#include "ColourMap.h"
+#include "ColourMaps.h"
 #include "FileReader.h"
+#include "ImageProcessor.h"
 #include "ImageWriter.h"
 #include "MandelbrotSet.h"
 
@@ -25,7 +26,7 @@ int main() {
     double xMax = std::any_cast<double>(values["xMax"]);
     double yMin = std::any_cast<double>(values["yMin"]);
     double yMax = std::any_cast<double>(values["yMax"]);
-    std::string colourMapOption = std::any_cast<std::string>(values["colourMapOption"]);
+    std::string ImageProcessorOption = std::any_cast<std::string>(values["colourMapOption"]);
     bool colourInvert = std::any_cast<bool>(values["colourInvert"]);
     std::string imagePath = std::any_cast<std::string>(values["imagePath"]);
 
@@ -39,8 +40,8 @@ int main() {
     mandelbrotSet.iterate(maxIter, domain);
 
     std::cout << "Creating image..." << std::endl;
-    ColourMap colourMap;
-    colourMap.toImage(image, domain, 0, maxIter, colourMapOption, colourInvert);
+    ImageProcessor imageProcessor;
+    imageProcessor.toImage(image, domain, 0, maxIter, ImageProcessorOption, colourInvert);
 
     std::cout << "Writing " << imagePath << " to disk..." << std::endl;
     ImageWriter imageWriter;

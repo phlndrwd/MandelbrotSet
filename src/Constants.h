@@ -6,6 +6,8 @@
 namespace consts {
   const char kSeparator = ',';
 
+  const unsigned kNumberOfColours = 256;
+
   const unsigned kMaxColourSize = 3;
 
   const std::string kSpace = " ";

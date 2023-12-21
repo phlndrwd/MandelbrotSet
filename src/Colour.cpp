@@ -2,23 +2,9 @@
 
 #include "Constants.h"
 
-Colour::Colour() {
-  r_ = 0;
-  g_ = 0;
-  b_ = 0;
-}
+Colour::Colour(): r_(0), g_(0), b_(0) {}
 
-Colour::Colour(unsigned char grey) {
-  r_ = grey;
-  g_ = grey;
-  b_ = grey;
-}
-
-Colour::Colour(unsigned char r, unsigned char g, unsigned char b) {
-  r_ = r;
-  g_ = g;
-  b_ = b;
-}
+Colour::Colour(unsigned char r, unsigned char g, unsigned char b): r_(r), g_(g), b_(b) {}
 
 const unsigned char Colour::getR() const {
   return r_;
