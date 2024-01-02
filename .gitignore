@@ -1,0 +1,6 @@
+build/
+Debug/
+Release/
+CMakeLists.txt.user
+*.o
+*.ppm

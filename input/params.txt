@@ -7,4 +7,4 @@ yMin,-1.5
 yMax,1.5
 colourMapOption,greyscale
 colourInvert,1
-imagePath,/home/h02/punderwo/Development/MandelbrotSet/image.ppm
+imagePath,./image.ppm

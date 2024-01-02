@@ -52,7 +52,6 @@ void MandelbrotSet::iterate(const unsigned& maxIter, std::vector<std::vector<uns
   }
 }
 
-
 const double MandelbrotSet::calcIncrement(const double& max, const double& min, const unsigned& size) {
   double inc = (max - min) / (double)(size - 1);
   return inc;

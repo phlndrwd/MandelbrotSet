@@ -9,8 +9,7 @@ void ImageProcessor::toImage(std::vector<std::vector<Colour>>& image,
                         const unsigned& min, const unsigned& max,
                         const std::string colourMapOption,
                         const bool& invert) {
-
-  colourFunc_ = [&](unsigned index) { return colourMaps_.getViridis(index); };
+  colourFunc_ = [&](unsigned index) { return colourMaps_.getCoolWarm(index); };
 
   unsigned width = data.size();
   unsigned height = data[0].size();
