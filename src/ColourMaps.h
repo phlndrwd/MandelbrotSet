@@ -16,6 +16,7 @@ public:
 
   Colour getBlackBody(const unsigned&);
   Colour getCoolWarm(const unsigned&);
+  Colour getGreyscale(const unsigned&);
   Colour getPlasma(const unsigned&);
   Colour getTurbo(const unsigned&);
   Colour getViridis(const unsigned&);

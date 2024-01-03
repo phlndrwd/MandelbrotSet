@@ -6,11 +6,11 @@
 #include <string>
 #include <vector>
 
-#include "ColourMaps.h"
 #include "FileReader.h"
 #include "ImageProcessor.h"
 #include "ImageWriter.h"
 #include "MandelbrotSet.h"
+#include "Utils.h"
 
 int main() {
   double startTime = omp_get_wtime();
@@ -26,10 +26,14 @@ int main() {
     double xMax = std::any_cast<double>(values["xMax"]);
     double yMin = std::any_cast<double>(values["yMin"]);
     double yMax = std::any_cast<double>(values["yMax"]);
-    std::string ImageProcessorOption = std::any_cast<std::string>(values["colourMapOption"]);
+    std::string colourMapOption = utils::strTolower(std::any_cast<std::string>(values["colourMapOption"]));
     bool colourInvert = std::any_cast<bool>(values["colourInvert"]);
     std::string imagePath = std::any_cast<std::string>(values["imagePath"]);
 
+    int colourMapOptIndex = utils::findPosInVector(consts::kColourMapOpts, colourMapOption);
+    if (colourMapOptIndex == -1) {
+      std::cout << "Error: Colour map option \"" << colourMapOption << "\" is not valid. Using default..." << std::endl;
+    }
     std::cout << "Initialising variables..." << std::endl;
     std::vector<std::vector<unsigned>> domain(width, std::vector<unsigned>(width, 0));
     std::vector<std::vector<Colour>> image(width, std::vector<Colour>(height));
@@ -41,7 +45,7 @@ int main() {
 
     std::cout << "Creating image..." << std::endl;
     ImageProcessor imageProcessor;
-    imageProcessor.toImage(image, domain, 0, maxIter, ImageProcessorOption, colourInvert);
+    imageProcessor.toImage(image, domain, 0, maxIter, colourMapOptIndex, colourInvert);
 
     std::cout << "Writing " << imagePath << " to disk..." << std::endl;
     ImageWriter imageWriter;

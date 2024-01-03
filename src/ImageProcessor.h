@@ -12,7 +12,7 @@ class ImageProcessor {
 public:
   ImageProcessor();
   void toImage(std::vector<std::vector<Colour>>&, const std::vector<std::vector<unsigned>>&,
-               const unsigned&, const unsigned&, const std::string, const bool& invert = false);
+               const unsigned&, const unsigned&, const int&, const bool& invert = false);
 
 private:
   ColourMaps colourMaps_;

@@ -11,6 +11,13 @@ Colour ColourMaps::getCoolWarm(const unsigned& index) {
   return coolWarm_[index];
 }
 
+Colour ColourMaps::getGreyscale(const unsigned& index) {
+  if (index >= consts::kNumberOfColours) {
+    throw std::runtime_error("Error in ColourMaps::getGreyscale: Index out-of-bounds...");
+  }
+  return Colour(index, index, index);
+}
+
 Colour ColourMaps::getBlackBody(const unsigned& index) {
   if (index >= consts::kNumberOfColours) {
     throw std::runtime_error("Error in ColourMaps::getBlackBody: Index out-of-bounds...");

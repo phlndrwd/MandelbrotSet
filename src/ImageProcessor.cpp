@@ -7,10 +7,38 @@ ImageProcessor::ImageProcessor() {}
 void ImageProcessor::toImage(std::vector<std::vector<Colour>>& image,
                         const std::vector<std::vector<unsigned>>& data,
                         const unsigned& min, const unsigned& max,
-                        const std::string colourMapOption,
+                        const int& colourMapOptIndex,
                         const bool& invert) {
-  colourFunc_ = [&](unsigned index) { return colourMaps_.getCoolWarm(index); };
-
+  switch (colourMapOptIndex) {
+    case enums::eBlackBody: {
+      colourFunc_ = [&](unsigned index) { return colourMaps_.getBlackBody(index); };
+      break;
+    }
+    case enums::eCoolWarm: {
+      colourFunc_ = [&](unsigned index) { return colourMaps_.getCoolWarm(index); };
+      break;
+    }
+    case enums::eGreyScale: {
+      colourFunc_ = [&](unsigned index) { return colourMaps_.getGreyscale(index); };
+      break;
+    }
+    case enums::ePlasma: {
+      colourFunc_ = [&](unsigned index) { return colourMaps_.getPlasma(index); };
+      break;
+    }
+    case enums::eTurbo: {
+      colourFunc_ = [&](unsigned index) { return colourMaps_.getTurbo(index); };
+      break;
+    }
+    case enums::eViridis: {
+      colourFunc_ = [&](unsigned index) { return colourMaps_.getViridis(index); };
+      break;
+    }
+    default: {
+      colourFunc_ = [&](unsigned index) { return colourMaps_.getCoolWarm(index); };
+      break;
+    }
+  }
   unsigned width = data.size();
   unsigned height = data[0].size();
 
