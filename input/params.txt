@@ -1,10 +1,10 @@
 maxIter,40
-width,10000
-height,10000
-xMin,-2
+width,1333
+height,1000
+xMin,-2.5
 xMax,1
 yMin,-1.5
 yMax,1.5
 colourMapOption,viridis
-colourInvert,1
+colourInvert,0
 imagePath,./image.ppm

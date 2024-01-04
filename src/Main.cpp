@@ -35,17 +35,17 @@ int main() {
       std::cout << "Error: Colour map option \"" << colourMapOption << "\" is not valid. Using default..." << std::endl;
     }
     std::cout << "Initialising variables..." << std::endl;
-    std::vector<std::vector<unsigned>> domain(width, std::vector<unsigned>(width, 0));
+    std::vector<std::vector<unsigned>> data(width, std::vector<unsigned>(height, 0));
     std::vector<std::vector<Colour>> image(width, std::vector<Colour>(height));
 
     std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
               << ", and maxIter = " << maxIter << "..." << std::endl;
     MandelbrotSet mandelbrotSet(width, height, xMin, xMax, yMin, yMax);
-    mandelbrotSet.iterate(maxIter, domain);
+    mandelbrotSet.iterate(maxIter, data);
 
     std::cout << "Creating image..." << std::endl;
     ImageProcessor imageProcessor;
-    imageProcessor.toImage(image, domain, 0, maxIter, colourMapOptIndex, colourInvert);
+    imageProcessor.toImage(image, data, 0, maxIter, colourMapOptIndex, colourInvert);
 
     std::cout << "Writing " << imagePath << " to disk..." << std::endl;
     ImageWriter imageWriter;

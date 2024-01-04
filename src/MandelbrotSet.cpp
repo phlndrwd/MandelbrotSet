@@ -24,7 +24,7 @@ MandelbrotSet::MandelbrotSet(const unsigned& width, const unsigned& height, cons
   });
 }
 
-void MandelbrotSet::iterate(const unsigned& maxIter, std::vector<std::vector<unsigned>>& domain) {
+void MandelbrotSet::iterate(const unsigned& maxIter, std::vector<std::vector<unsigned>>& data) {
   complex c;
   complex z;
   double x;
@@ -47,7 +47,7 @@ void MandelbrotSet::iterate(const unsigned& maxIter, std::vector<std::vector<uns
           break;
         }
       }
-      domain[i][j] = iter;
+      data[i][j] = iter;
     }
   }
 }

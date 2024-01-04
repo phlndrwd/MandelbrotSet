@@ -17,12 +17,12 @@ bool ImageWriter::toPPM(const std::vector<std::vector<Colour>>& image, const std
     fileOut << width << " " << height << std::endl;
     fileOut << "255" << std::endl;
 
-    for (unsigned i = 0; i < width; i++) {
-      for (unsigned j = 0; j < height - 1; j++) {
+    for (int j = height - 1; j > -1; j--) {
+      for (unsigned i = 0; i < width - 1; i++) {
           const Colour& pixel = image[i][j];
           fileOut << pixel.getStr() << consts::kBigSpace;
       }
-      const Colour& pixel = image[i][height - 1];
+      const Colour& pixel = image[width - 1][j];
       fileOut << pixel.getStr() << std::endl;
     }
     fileOut.close();
