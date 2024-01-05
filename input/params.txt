@@ -5,6 +5,6 @@ xMin,-3
 xMax,1
 yMin,-1.5
 yMax,1.5
-colourMapOption,viridis
+colourMapOption,turbo
 colourInvert,0
 imagePath,./image.ppm

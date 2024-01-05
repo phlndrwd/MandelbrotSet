@@ -1,9 +1,48 @@
 #include "FileReader.h"
 
+#include "Constants.h"
+
 #include <cctype>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+
+namespace {
+std::string strNoWhiteSpace(std::string input) {
+  input.erase(std::remove_if(input.begin(), input.end(), [](unsigned char x) {
+      return std::isspace(x);
+  }), input.end());
+  return input;
+}
+
+
+std::string strToLower(std::string input) {
+  std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) {
+    return std::tolower(c);
+  });
+  return input;
+}
+
+bool strToBool(std::string input) {
+  std::string cleanStr = strNoWhiteSpace(strToLower(input));
+  if ((cleanStr.size() == 1 && cleanStr == "1") || (cleanStr.size() == 4 && cleanStr == "true")) {
+    return true;
+  } else if ((cleanStr.size() == 1 && cleanStr == "0") || (cleanStr.size() == 5 && cleanStr == "false")) {
+    return false;
+  } else {
+    throw std::invalid_argument("ERROR in FileReader::strToBool: Input of \"" + input + "\" is invalid.");
+  }
+}
+std::vector<std::string> strToWords(const std::string& inputStr, const char separatorChar = consts::kSeparator)  {
+  std::stringstream stringStream(inputStr);
+  std::string word = "";
+  std::vector<std::string> words;
+  while (std::getline(stringStream, word, separatorChar)) {
+    words.push_back(word);
+  }
+  return words;
+}
+}
 
 FileReader::FileReader() {}
 
@@ -43,7 +82,7 @@ bool FileReader::readParams(std::map<std::string, std::any>& values) {
           bool param = std::stoi(words[1]);
           values.insert({key, param});
         } else {
-          std::string param = words[1];
+          std::string param = strToLower(words[1]);
           values.insert({key, param});
         }
       } else {
@@ -54,22 +93,4 @@ bool FileReader::readParams(std::map<std::string, std::any>& values) {
   } else {
     return false;
   }
-}
-
-std::vector<std::string> FileReader::strToWords(const std::string& inputStr,
-                                                const char separatorChar) const {
-  std::stringstream stringStream(inputStr);
-  std::string word = "";
-  std::vector<std::string> words;
-  while (std::getline(stringStream, word, separatorChar)) {
-    words.push_back(word);
-  }
-  return words;
-}
-
-std::string FileReader::strNoWhiteSpace(std::string& input) const {
-  input.erase(std::remove_if(input.begin(), input.end(), [](unsigned char x) {
-      return std::isspace(x);
-  }), input.end());
-  return input;
 }

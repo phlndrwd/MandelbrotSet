@@ -10,7 +10,17 @@
 #include "ImageProcessor.h"
 #include "ImageWriter.h"
 #include "MandelbrotSet.h"
-#include "Utils.h"
+
+namespace {
+int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
+  int pos = -1;
+  typename std::vector<std::string>::iterator it = std::find(vector.begin(), vector.end(), searchTerm);
+  if (it != vector.end()) {
+    return std::distance(vector.begin(), it);
+  }
+  return pos;
+}
+}
 
 int main() {
   double startTime = omp_get_wtime();
@@ -26,11 +36,11 @@ int main() {
     double xMax = std::any_cast<double>(values["xMax"]);
     double yMin = std::any_cast<double>(values["yMin"]);
     double yMax = std::any_cast<double>(values["yMax"]);
-    std::string colourMapOption = utils::strTolower(std::any_cast<std::string>(values["colourMapOption"]));
+    std::string colourMapOption = std::any_cast<std::string>(values["colourMapOption"]);
     bool colourInvert = std::any_cast<bool>(values["colourInvert"]);
     std::string imagePath = std::any_cast<std::string>(values["imagePath"]);
 
-    int colourMapOptIndex = utils::findPosInVector(consts::kColourMapOpts, colourMapOption);
+    int colourMapOptIndex = findPosInVector(consts::kColourMapOpts, colourMapOption);
     if (colourMapOptIndex == -1) {
       std::cout << "Error: Colour map option \"" << colourMapOption << "\" is not valid. Using default..." << std::endl;
     }

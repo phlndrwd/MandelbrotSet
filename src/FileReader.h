@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-#include "Constants.h"
-
 class FileReader {
 public:
   FileReader();
@@ -16,9 +14,6 @@ public:
   bool readParams(std::map<std::string, std::any>&);
 
 private:
-  std::vector<std::string> strToWords(const std::string&,
-                                      const char separatorChar = consts::kSeparator) const;
-  std::string strNoWhiteSpace(std::string&) const;
 };
 
 #endif // FILEREADER_H
