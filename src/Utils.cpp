@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <fstream>
-#include <memory>
 
 namespace utils {
 std::vector<std::string> strToWords(const std::string inputStr,
