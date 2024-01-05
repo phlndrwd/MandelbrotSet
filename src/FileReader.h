@@ -10,7 +10,7 @@ class FileReader {
 public:
   FileReader();
 
-  bool readText(std::vector<std::string>&);
+  bool readText(std::string&, std::vector<std::string>&);
   bool readParams(std::map<std::string, std::any>&);
 
 private:

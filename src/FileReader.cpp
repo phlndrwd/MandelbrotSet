@@ -46,17 +46,19 @@ std::vector<std::string> strToWords(const std::string& inputStr, const char sepa
 
 FileReader::FileReader() {}
 
-bool FileReader::readText(std::vector<std::string>& lines) {
+bool FileReader::readText(std::string& path, std::vector<std::string>& lines) {
   try {
     std::string line;
-    std::ifstream fileIn(consts::kInputPath + consts::kParamFile);
+    std::ifstream fileIn(path);
     if (fileIn.is_open()) {
       while (std::getline(fileIn, line)) {
         lines.push_back(line);
       }
       fileIn.close();
+      return true;
     }
-    return true;
+    std::cout << "Error in FileReader::readText: File path \"" + path + "\" is not valid." << std::endl;
+    return false;
   } catch (const std::exception& e) {
     std::cout << e.what() << std::endl;
     return false;
@@ -65,7 +67,8 @@ bool FileReader::readText(std::vector<std::string>& lines) {
 
 bool FileReader::readParams(std::map<std::string, std::any>& values) {
   std::vector<std::string> lines;
-  if (readText(lines) == true) {
+  std::string paramsPath = consts::kInputPath + consts::kParamFile;
+  if (readText(paramsPath, lines) == true) {
     for (auto& line : lines) {
       std::string lineNoWhite = strNoWhiteSpace(line);
       std::vector<std::string> words = strToWords(lineNoWhite);
