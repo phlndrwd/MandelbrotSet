@@ -1,13 +1,8 @@
 #include "MandelbrotSet.h"
 
 #include <algorithm>
-//#include <cmath>
-//#include <complex>
-
-struct complex{
-  double real;
-  double imag;
-};
+#include <cmath>
+#include <complex>
 
 MandelbrotSet::MandelbrotSet(const unsigned& width, const unsigned& height, const double& xMin,
                              const double& xMax, const double& yMin, const double& yMax) :
@@ -25,8 +20,8 @@ MandelbrotSet::MandelbrotSet(const unsigned& width, const unsigned& height, cons
 }
 
 void MandelbrotSet::iterate(const unsigned& maxIter, std::vector<std::vector<unsigned>>& data) {
-  complex c;
-  complex z;
+  std::complex<double> c;
+  std::complex<double> z;
   double x;
   double y;
 
@@ -34,15 +29,15 @@ void MandelbrotSet::iterate(const unsigned& maxIter, std::vector<std::vector<uns
     x = xAxis_[i];
     for (unsigned j = 0; j < height_; j++) {
       y = yAxis_[j];
-      c.real = x;
-      c.imag = y;
+      c.real(x);
+      c.imag(y);
       z = c;
       unsigned iter = 0;
       for (iter = 0; iter < maxIter; iter++) {
-        double zReal = (z.real * z.real) - (z.imag * z.imag) + c.real;
-        z.imag = z.real * z.imag * 2 + c.imag;
-        z.real = zReal;
-        double val = (z.real * z.real + z.imag * z.imag);
+        double zReal = (z.real() * z.real()) - (z.imag() * z.imag()) + c.real();
+        z.imag(z.real() * z.imag() * 2 + c.imag());
+        z.real(zReal);
+        double val = (z.real() * z.real() + z.imag() * z.imag());
         if (val > 4.0e0) {
           break;
         }

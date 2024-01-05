@@ -32,7 +32,7 @@ namespace consts {
   const unsigned kMaxColourSize = 3;
 
   const std::string kSpace = " ";
-  const std::string kBigSpace = "   ";
+  const std::string kBigSpace = "  ";
   const std::string kInputPath = "./input/";
   const std::string kParamFile = "params.txt";
 }  // namespace consts

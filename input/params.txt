@@ -1,7 +1,7 @@
 maxIter,40
 width,1333
 height,1000
-xMin,-2.5
+xMin,-3
 xMax,1
 yMin,-1.5
 yMax,1.5
