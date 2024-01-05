@@ -20,25 +20,16 @@ MandelbrotSet::MandelbrotSet(const unsigned& width, const unsigned& height, cons
 }
 
 void MandelbrotSet::iterate(const unsigned& maxIter, std::vector<std::vector<unsigned>>& data) {
-  std::complex<double> c;
-  std::complex<double> z;
-  double x;
-  double y;
-
   for (unsigned i = 0; i < width_; i++) {
-    x = xAxis_[i];
+    double x = xAxis_[i];
     for (unsigned j = 0; j < height_; j++) {
-      y = yAxis_[j];
-      c.real(x);
-      c.imag(y);
-      z = c;
+      double y = yAxis_[j];
+      std::complex<double> c(x, y);
+      std::complex<double> z = 0;
       unsigned iter = 0;
       for (iter = 0; iter < maxIter; iter++) {
-        double zReal = (z.real() * z.real()) - (z.imag() * z.imag()) + c.real();
-        z.imag(z.real() * z.imag() * 2 + c.imag());
-        z.real(zReal);
-        double val = (z.real() * z.real() + z.imag() * z.imag());
-        if (val > 4.0e0) {
+        z = z * z + c;
+        if (std::abs(z) > 2.0e0) {
           break;
         }
       }
