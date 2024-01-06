@@ -19,7 +19,7 @@ MandelbrotSet::MandelbrotSet(const unsigned& width, const unsigned& height, cons
   });
 }
 
-void MandelbrotSet::iterate(const unsigned& maxIter, std::vector<std::vector<unsigned>>& data) {
+void MandelbrotSet::iterate(const unsigned maxIter, const double threshold, std::vector<std::vector<unsigned>>& data) {
   for (unsigned i = 0; i < width_; i++) {
     double x = xAxis_[i];
     for (unsigned j = 0; j < height_; j++) {
@@ -29,7 +29,7 @@ void MandelbrotSet::iterate(const unsigned& maxIter, std::vector<std::vector<uns
       unsigned iter = 0;
       for (iter = 0; iter < maxIter; iter++) {
         z = z * z + c;
-        if (std::abs(z) > 2.0e0) {
+        if (std::abs(z) > threshold) {
           break;
         }
       }

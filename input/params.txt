@@ -5,6 +5,7 @@ xMin,-3
 xMax,1
 yMin,-1.5
 yMax,1.5
+threshold,2
 colourMapOption,turbo
 colourInvert,0
 imagePath,./image.ppm

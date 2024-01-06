@@ -36,6 +36,7 @@ int main() {
     double xMax = std::any_cast<double>(values["xMax"]);
     double yMin = std::any_cast<double>(values["yMin"]);
     double yMax = std::any_cast<double>(values["yMax"]);
+    double threshold = std::any_cast<double>(values["threshold"]);
     std::string colourMapOption = std::any_cast<std::string>(values["colourMapOption"]);
     bool colourInvert = std::any_cast<bool>(values["colourInvert"]);
     std::string imagePath = std::any_cast<std::string>(values["imagePath"]);
@@ -51,7 +52,7 @@ int main() {
     std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
               << ", and maxIter = " << maxIter << "..." << std::endl;
     MandelbrotSet mandelbrotSet(width, height, xMin, xMax, yMin, yMax);
-    mandelbrotSet.iterate(maxIter, data);
+    mandelbrotSet.iterate(maxIter, threshold, data);
 
     std::cout << "Creating image..." << std::endl;
     ImageProcessor imageProcessor;

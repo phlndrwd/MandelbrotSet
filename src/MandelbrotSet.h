@@ -7,7 +7,7 @@ class MandelbrotSet {
 public:
   MandelbrotSet(const unsigned&, const unsigned&, const double&,
                 const double&, const double&, const double&);
-  void iterate(const unsigned&, std::vector<std::vector<unsigned>>&);
+  void iterate(const unsigned, const double, std::vector<std::vector<unsigned>>&);
 
 private:
   const double calcIncrement(const double&, const double&, const unsigned&);

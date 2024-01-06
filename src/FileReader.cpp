@@ -77,12 +77,12 @@ bool FileReader::readParams(std::map<std::string, std::any>& values) {
         if (key == "maxIter" || key == "width" || key == "height") {
           unsigned param = std::stoul(words[1]);
           values.insert({key, param});
-        } else if (key == "xMin" || key == "xMax" ||
-                   key == "yMin"|| key == "yMax") {
+        } else if (key == "xMin" || key == "xMax" || key == "yMin" ||
+                   key == "yMax" || key == "threshold") {
           double param = std::stod(words[1]);
           values.insert({key, param});
         } else if (key == "colourInvert") {
-          bool param = std::stoi(words[1]);
+          bool param = strToBool(words[1]);
           values.insert({key, param});
         } else {
           std::string param = strToLower(words[1]);
