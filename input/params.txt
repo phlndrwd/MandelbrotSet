@@ -1,10 +1,10 @@
-maxIter,40
-width,1333
-height,1000
-xMin,-3
+width,10000
+height,10000
+xMin,-2
 xMax,1
 yMin,-1.5
 yMax,1.5
+maxIter,1000
 threshold,2
 colourMapOption,turbo
 colourInvert,0

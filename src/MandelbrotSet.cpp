@@ -1,5 +1,7 @@
 #include "MandelbrotSet.h"
 
+#include <omp.h>
+
 #include <algorithm>
 #include <cmath>
 #include <complex>
@@ -20,6 +22,7 @@ MandelbrotSet::MandelbrotSet(const unsigned& width, const unsigned& height, cons
 }
 
 void MandelbrotSet::iterate(const unsigned maxIter, const double threshold, std::vector<std::vector<unsigned>>& data) {
+  #pragma omp parallel for default(none) shared(maxIter, threshold, data) schedule(static, 1)
   for (unsigned i = 0; i < width_; i++) {
     double x = xAxis_[i];
     for (unsigned j = 0; j < height_; j++) {

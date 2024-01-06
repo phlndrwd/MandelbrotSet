@@ -29,13 +29,13 @@ int main() {
   std::map<std::string, std::any> values;
   FileReader fileReader;
   if (fileReader.readParams(values)) {
-    unsigned maxIter = std::any_cast<unsigned>(values["maxIter"]);
     unsigned width = std::any_cast<unsigned>(values["width"]);
     unsigned height = std::any_cast<unsigned>(values["height"]);
     double xMin = std::any_cast<double>(values["xMin"]);
     double xMax = std::any_cast<double>(values["xMax"]);
     double yMin = std::any_cast<double>(values["yMin"]);
     double yMax = std::any_cast<double>(values["yMax"]);
+    unsigned maxIter = std::any_cast<unsigned>(values["maxIter"]);
     double threshold = std::any_cast<double>(values["threshold"]);
     std::string colourMapOption = std::any_cast<std::string>(values["colourMapOption"]);
     bool colourInvert = std::any_cast<bool>(values["colourInvert"]);
@@ -50,7 +50,7 @@ int main() {
     std::vector<std::vector<Colour>> image(width, std::vector<Colour>(height));
 
     std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
-              << ", and maxIter = " << maxIter << "..." << std::endl;
+              << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
     MandelbrotSet mandelbrotSet(width, height, xMin, xMax, yMin, yMax);
     mandelbrotSet.iterate(maxIter, threshold, data);
 
