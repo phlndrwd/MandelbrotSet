@@ -65,4 +65,5 @@ int main() {
     }
     std::cout << "Time taken = " << omp_get_wtime() - startTime << "seconds." << std::endl;
   }
+  return 0;
 }
