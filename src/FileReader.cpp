@@ -2,6 +2,7 @@
 
 #include "Constants.h"
 
+#include <algorithm>
 #include <cctype>
 #include <fstream>
 #include <iostream>
@@ -14,7 +15,6 @@ std::string strNoWhiteSpace(std::string input) {
   }), input.end());
   return input;
 }
-
 
 std::string strToLower(std::string input) {
   std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) {

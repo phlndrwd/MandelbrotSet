@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "raylib.h"
+
 #include "FileReader.h"
 #include "ImageProcessor.h"
 #include "ImageWriter.h"
@@ -23,6 +25,7 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 
 int main() {
+  InitWindow(640, 480, "Raylib Test");
   double startTime = omp_get_wtime();
 
   std::cout << "Reading parameters..." << std::endl;
@@ -64,6 +67,7 @@ int main() {
       std::cout << "No image file produced." << std::endl;
     }
     std::cout << "Time taken = " << omp_get_wtime() - startTime << "seconds." << std::endl;
+    CloseWindow();
   }
   return 0;
 }
