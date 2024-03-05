@@ -2,11 +2,10 @@
 
 #include <cmath>
 
-ImageProcessor::ImageProcessor() {}
+ImageProcessor::ImageProcessor(const unsigned& min, const unsigned& max) : min_(min), max_(max) {}
 
 void ImageProcessor::toImage(std::vector<std::vector<Colour>>& image,
                         const std::vector<std::vector<unsigned>>& data,
-                        const unsigned& min, const unsigned& max,
                         const int& colourMapOptIndex,
                         const bool& invert) {
   switch (colourMapOptIndex) {
@@ -44,7 +43,7 @@ void ImageProcessor::toImage(std::vector<std::vector<Colour>>& image,
 
   for (unsigned i = 0; i < width; i++) {
     for (unsigned j = 0; j < height; j++) {
-      image[i][j] = colourFunc_(calcIndex(data[i][j], min, max, invert));
+      image[i][j] = colourFunc_(calcIndex(data[i][j], min_, max_, invert));
     }
   }
 }

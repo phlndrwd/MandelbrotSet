@@ -1,5 +1,5 @@
-width,1500
-height,1500
+width,1000
+height,1000
 xMin,-2
 xMax,1
 yMin,-1.5

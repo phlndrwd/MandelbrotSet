@@ -2,7 +2,6 @@
 #define IMAGEPROCESSOR_H
 
 #include <functional>
-#include <string>
 #include <vector>
 
 #include "Colour.h"
@@ -10,9 +9,9 @@
 
 class ImageProcessor {
 public:
-  ImageProcessor();
+  ImageProcessor(const unsigned&, const unsigned&);
   void toImage(std::vector<std::vector<Colour>>&, const std::vector<std::vector<unsigned>>&,
-               const unsigned&, const unsigned&, const int&, const bool& invert = false);
+               const int&, const bool& invert = false);
 
 private:
   ColourMaps colourMaps_;
@@ -20,6 +19,9 @@ private:
   std::function<Colour(unsigned)> colourFunc_;
 
   unsigned calcIndex(double, const double&, const double&, const bool& invert);
+
+  const unsigned min_;
+  const unsigned max_;
 };
 
 #endif // IMAGEPROCESSOR_H

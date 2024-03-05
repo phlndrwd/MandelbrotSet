@@ -24,10 +24,17 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 }
 
-int main() {
-  InitWindow(640, 480, "Raylib Test");
-  double startTime = omp_get_wtime();
+void generateFractal(MandelbrotSet& mandelbrotSet, ImageProcessor& imageProcessor,
+		     std::vector<std::vector<unsigned>>& data, std::vector<std::vector<Colour>>& image,
+		     const double& xMin, const double& xMax, const double& yMin, const double& yMax, bool colourInvert,
+		     const int& colourMapOptIndex, const bool& invert) {
+  mandelbrotSet.calcAxes(xMin, xMax, yMin, yMax);
+  mandelbrotSet.iterate(data);
+  imageProcessor.toImage(image, data, colourMapOptIndex, colourInvert);
+}
 
+int main() {
+  double startTime = omp_get_wtime();
   std::cout << "Reading parameters..." << std::endl;
   std::map<std::string, std::any> values;
   FileReader fileReader;
@@ -43,30 +50,35 @@ int main() {
     std::string colourMapOption = std::any_cast<std::string>(values["colourMapOption"]);
     bool colourInvert = std::any_cast<bool>(values["colourInvert"]);
     std::string imagePath = std::any_cast<std::string>(values["imagePath"]);
-
     int colourMapOptIndex = findPosInVector(consts::kColourMapOpts, colourMapOption);
     if (colourMapOptIndex == -1) {
       std::cout << "Error: Colour map option \"" << colourMapOption << "\" is not valid. Using default..." << std::endl;
     }
+
+    InitWindow(width, height, "Raylib Test");
+
     std::cout << "Initialising variables..." << std::endl;
     std::vector<std::vector<unsigned>> data(width, std::vector<unsigned>(height, 0));
     std::vector<std::vector<Colour>> image(width, std::vector<Colour>(height));
 
     std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
               << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
-    MandelbrotSet mandelbrotSet(width, height, xMin, xMax, yMin, yMax);
-    mandelbrotSet.iterate(maxIter, threshold, data);
 
-    std::cout << "Creating image..." << std::endl;
-    ImageProcessor imageProcessor;
-    imageProcessor.toImage(image, data, 0, maxIter, colourMapOptIndex, colourInvert);
+    MandelbrotSet mandelbrotSet(width, height, maxIter, threshold);
+    ImageProcessor imageProcessor(0, maxIter);
+
+    generateFractal(mandelbrotSet, imageProcessor, data, image, xMin, xMax, yMin, yMax,
+                    colourInvert, colourMapOptIndex, colourInvert);
+
+    ImageWriter imageWriter;
 
     std::cout << "Writing " << imagePath << " to disk..." << std::endl;
-    ImageWriter imageWriter;
     if (imageWriter.toPPM(image, imagePath) == false) {
       std::cout << "No image file produced." << std::endl;
     }
     std::cout << "Time taken = " << omp_get_wtime() - startTime << "seconds." << std::endl;
+
+
     CloseWindow();
   }
   return 0;
