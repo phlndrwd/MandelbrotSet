@@ -10,12 +10,12 @@ MandelbrotSet::MandelbrotSet(const unsigned& width, const unsigned& height,
                              const unsigned& maxIter, const double& threshold) :
     xAxis_(width, 0), yAxis_(height, 0), width_(width), height_(height), maxIter_(maxIter), threshold_(threshold) {}
 
-void MandelbrotSet::iterate(std::vector<std::vector<unsigned>>& data) {
+void MandelbrotSet::iterate(std::vector<unsigned>& data) {
   #pragma omp parallel for default(none) shared(maxIter_, threshold_, data) schedule(static, 1)
-  for (unsigned i = 0; i < width_; i++) {
-    double x = xAxis_[i];
-    for (unsigned j = 0; j < height_; j++) {
-      double y = yAxis_[j];
+  for (unsigned j = 0; j < height_; j++) {
+    double y = yAxis_[j];
+    for (unsigned i = 0; i < width_; i++) {
+      double x = xAxis_[i];
       std::complex<double> c(x, y);
       std::complex<double> z = 0;
       unsigned iter = 0;
@@ -25,7 +25,8 @@ void MandelbrotSet::iterate(std::vector<std::vector<unsigned>>& data) {
           break;
         }
       }
-      data[i][j] = iter;
+      unsigned index = j * height_ + i;
+      data[index] = iter;
     }
   }
 }

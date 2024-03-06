@@ -8,7 +8,7 @@ public:
   MandelbrotSet(const unsigned&, const unsigned&, const unsigned&, const double&);
 
   void calcAxes(const double&, const double&, const double&, const double&);
-  void iterate(std::vector<std::vector<unsigned>>&);
+  void iterate(std::vector<unsigned>&);
 
 private:
   const double calcIncrement(const double&, const double&, const unsigned&);

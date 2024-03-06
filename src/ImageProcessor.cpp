@@ -2,12 +2,12 @@
 
 #include <cmath>
 
-ImageProcessor::ImageProcessor(const unsigned& min, const unsigned& max) : min_(min), max_(max) {}
+ImageProcessor::ImageProcessor(const unsigned& width, const unsigned& height,
+                               const unsigned& min, const unsigned& max) :
+    width_(width), height_(height), min_(min), max_(max) {}
 
-void ImageProcessor::toImage(std::vector<std::vector<Colour>>& image,
-                        const std::vector<std::vector<unsigned>>& data,
-                        const int& colourMapOptIndex,
-                        const bool& invert) {
+void ImageProcessor::toImage(std::vector<Colour>& image, const std::vector<unsigned>& data,
+                             const int& colourMapOptIndex, const bool& invert) {
   switch (colourMapOptIndex) {
     case enums::eBlackBody: {
       colourFunc_ = [&](unsigned index) { return colourMaps_.getBlackBody(index); };
@@ -38,12 +38,11 @@ void ImageProcessor::toImage(std::vector<std::vector<Colour>>& image,
       break;
     }
   }
-  unsigned width = data.size();
-  unsigned height = data[0].size();
 
-  for (unsigned i = 0; i < width; i++) {
-    for (unsigned j = 0; j < height; j++) {
-      image[i][j] = colourFunc_(calcIndex(data[i][j], min_, max_, invert));
+  for (unsigned j = 0; j < height_; j++) {
+    for (unsigned i = 0; i < width_; i++) {
+      unsigned index = j * height_ + i;
+      image[index] = colourFunc_(calcIndex(data[index], min_, max_, invert));
     }
   }
 }

@@ -9,9 +9,8 @@
 
 class ImageProcessor {
 public:
-  ImageProcessor(const unsigned&, const unsigned&);
-  void toImage(std::vector<std::vector<Colour>>&, const std::vector<std::vector<unsigned>>&,
-               const int&, const bool& invert = false);
+  ImageProcessor(const unsigned&, const unsigned&, const unsigned&, const unsigned&);
+  void toImage(std::vector<Colour>&, const std::vector<unsigned>&, const int&, const bool& invert = false);
 
 private:
   ColourMaps colourMaps_;
@@ -20,6 +19,8 @@ private:
 
   unsigned calcIndex(double, const double&, const double&, const bool& invert);
 
+  const unsigned width_;
+  const unsigned height_;
   const unsigned min_;
   const unsigned max_;
 };

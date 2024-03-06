@@ -9,7 +9,7 @@
 class ImageWriter {
 public:
   ImageWriter();
-  bool toPPM(const std::vector<std::vector<Colour>>&, const std::string&);
+  bool toPPM(const std::vector<Colour>&, const std::string&, const unsigned&, const unsigned&);
 private:
 
 };
