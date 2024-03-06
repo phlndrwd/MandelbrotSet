@@ -49,6 +49,7 @@ int main() {
     InitWindow(width, height, "Raylib Test");
 
     std::cout << "Initialising variables..." << std::endl;
+
     std::vector<unsigned> data(width * height, 0);
     std::vector<Colour> image(width * height);
 
@@ -56,11 +57,10 @@ int main() {
               << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
 
     MandelbrotSet mandelbrotSet(width, height, maxIter, threshold);
-    ImageProcessor imageProcessor(width, height, 0, maxIter);
+    ImageProcessor imageProcessor(width, height, 0, maxIter, colourMapOptIndex, colourInvert);
 
-    mandelbrotSet.calcAxes(xMin, xMax, yMin, yMax);
-    mandelbrotSet.iterate(data);
-    imageProcessor.toImage(image, data, colourMapOptIndex, colourInvert);
+    mandelbrotSet.run(xMin, xMax, yMin, yMax, data);
+    imageProcessor.toImage(image, data);
 
     ImageWriter imageWriter;
     std::cout << "Writing " << imagePath << " to disk..." << std::endl;
@@ -68,7 +68,6 @@ int main() {
       std::cout << "No image file produced." << std::endl;
     }
     std::cout << "Time taken = " << omp_get_wtime() - startTime << "seconds." << std::endl;
-
 
     CloseWindow();
   }

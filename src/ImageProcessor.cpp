@@ -3,12 +3,12 @@
 #include <cmath>
 
 ImageProcessor::ImageProcessor(const unsigned& width, const unsigned& height,
-                               const unsigned& min, const unsigned& max) :
-    width_(width), height_(height), min_(min), max_(max) {}
+			       const unsigned& min, const unsigned& max,
+			       const int& colourMapOptIndex, const bool& invert) :
+    width_(width), height_(height), min_(min), max_(max), colourMapOptIndex_(colourMapOptIndex), invert_(invert) {}
 
-void ImageProcessor::toImage(std::vector<Colour>& image, const std::vector<unsigned>& data,
-                             const int& colourMapOptIndex, const bool& invert) {
-  switch (colourMapOptIndex) {
+void ImageProcessor::toImage(std::vector<Colour>& image, const std::vector<unsigned>& data) {
+  switch (colourMapOptIndex_) {
     case enums::eBlackBody: {
       colourFunc_ = [&](unsigned index) { return colourMaps_.getBlackBody(index); };
       break;
@@ -38,25 +38,23 @@ void ImageProcessor::toImage(std::vector<Colour>& image, const std::vector<unsig
       break;
     }
   }
-
   for (unsigned j = 0; j < height_; j++) {
     for (unsigned i = 0; i < width_; i++) {
       unsigned index = j * height_ + i;
-      image[index] = colourFunc_(calcIndex(data[index], min_, max_, invert));
+      image[index] = colourFunc_(calcIndex(data[index]));
     }
   }
 }
 
-unsigned ImageProcessor::calcIndex(double value, const double& min,
-                                   const double& max, const bool& invert) {
-  if (value < min) {
-    value = min;
-  } else if (value > max) {
-    value = max;
+unsigned ImageProcessor::calcIndex(double value) const {
+  if (value < min_) {
+    value = min_;
+  } else if (value > max_) {
+    value = max_;
   }
-  if (invert) {
-    value = max - value;
+  if (invert_) {
+    value = max_ - value;
   }
-  double fracVal = value / (max - min);
+  double fracVal = value / (max_ - min_);
   return std::round(fracVal * (consts::kNumberOfColours - 1));
 }

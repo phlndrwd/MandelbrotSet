@@ -9,20 +9,22 @@
 
 class ImageProcessor {
 public:
-  ImageProcessor(const unsigned&, const unsigned&, const unsigned&, const unsigned&);
-  void toImage(std::vector<Colour>&, const std::vector<unsigned>&, const int&, const bool& invert = false);
+  ImageProcessor(const unsigned&, const unsigned&, const unsigned&, const unsigned&,
+                 const int& colourMapOptIndex, const bool& invert);
+  void toImage(std::vector<Colour>&, const std::vector<unsigned>&);
 
 private:
-  ColourMaps colourMaps_;
-
+  unsigned calcIndex(double) const;
   std::function<Colour(unsigned)> colourFunc_;
 
-  unsigned calcIndex(double, const double&, const double&, const bool& invert);
+  ColourMaps colourMaps_;
 
   const unsigned width_;
   const unsigned height_;
   const unsigned min_;
   const unsigned max_;
+  const int colourMapOptIndex_;
+  const bool invert_;
 };
 
 #endif // IMAGEPROCESSOR_H
