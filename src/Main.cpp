@@ -44,6 +44,8 @@ void drawFractal(const unsigned& width, const unsigned& height, std::vector<Colo
       DrawTexture(fracTexture, 0, 0, WHITE);
     EndDrawing();
   }
+  UnloadTexture(fracTexture);
+  CloseWindow();
 }
 
 int main() {
