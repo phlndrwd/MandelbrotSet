@@ -26,14 +26,12 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 
 void drawFractal(const unsigned& width, const unsigned& height, std::vector<Colour>& image) {
   InitWindow(width, height, "Raylib Test");
-
-  Image fracImage = GenImageColor(width, height, BLACK);
+  Image fracImage = GenImageColor(width, height, WHITE);  // Create offscreen image
   for (unsigned j = 0; j < height; j++) {
     for (unsigned i = 0; i < width; i++) {
       const Colour& pixel = image[j * height + i];
-      Color rayCol(pixel.getR(), pixel.getG(), pixel.getB(), 1);
+      Color rayCol(pixel.getR(), pixel.getG(), pixel.getB(), 255);
       ImageDrawPixel(&fracImage, i, j, rayCol);
-      //DrawRectangle(i, j, 1, 1, rayCol);
     }
   }
   Texture2D fracTexture = LoadTextureFromImage(fracImage);  // Image converted and uploaded to GPU memory (VRAM)
