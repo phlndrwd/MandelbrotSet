@@ -24,6 +24,28 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 }
 
+void drawFractal(const unsigned& width, const unsigned& height, std::vector<Colour>& image) {
+  InitWindow(width, height, "Raylib Test");
+
+  Image fracImage = GenImageColor(width, height, BLACK);
+  for (unsigned j = 0; j < height; j++) {
+    for (unsigned i = 0; i < width; i++) {
+      const Colour& pixel = image[j * height + i];
+      Color rayCol(pixel.getR(), pixel.getG(), pixel.getB(), 1);
+      ImageDrawPixel(&fracImage, i, j, rayCol);
+      //DrawRectangle(i, j, 1, 1, rayCol);
+    }
+  }
+  Texture2D fracTexture = LoadTextureFromImage(fracImage);  // Image converted and uploaded to GPU memory (VRAM)
+  UnloadImage(fracImage);  // Converted image can be unloaded from RAM
+  SetTargetFPS(60);
+  while (WindowShouldClose() == false) {
+    BeginDrawing();
+      DrawTexture(fracTexture, 0, 0, WHITE);
+    EndDrawing();
+  }
+}
+
 int main() {
   double startTime = omp_get_wtime();
   std::cout << "Reading parameters..." << std::endl;
@@ -46,21 +68,19 @@ int main() {
       std::cout << "Error: Colour map option \"" << colourMapOption << "\" is not valid. Using default..." << std::endl;
     }
 
-    InitWindow(width, height, "Raylib Test");
-
     std::cout << "Initialising variables..." << std::endl;
-
     std::vector<unsigned> data(width * height, 0);
     std::vector<Colour> image(width * height);
 
     std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
               << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
-
     MandelbrotSet mandelbrotSet(width, height, maxIter, threshold);
     ImageProcessor imageProcessor(width, height, 0, maxIter, colourMapOptIndex, colourInvert);
 
     mandelbrotSet.run(xMin, xMax, yMin, yMax, data);
     imageProcessor.toImage(image, data);
+
+    drawFractal(width, height, image);
 
     ImageWriter imageWriter;
     std::cout << "Writing " << imagePath << " to disk..." << std::endl;
@@ -69,7 +89,6 @@ int main() {
     }
     std::cout << "Time taken = " << omp_get_wtime() - startTime << "seconds." << std::endl;
 
-    CloseWindow();
   }
   return 0;
 }
