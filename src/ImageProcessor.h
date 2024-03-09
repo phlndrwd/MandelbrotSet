@@ -4,6 +4,8 @@
 #include <functional>
 #include <vector>
 
+#include <raylib.h>
+
 #include "Colour.h"
 #include "ColourMaps.h"
 
@@ -11,7 +13,7 @@ class ImageProcessor {
 public:
   ImageProcessor(const unsigned&, const unsigned&, const unsigned&, const unsigned&,
                  const int& colourMapOptIndex, const bool& invert);
-  void toImage(std::vector<Colour>&, const std::vector<unsigned>&);
+  void toImage(Image&, const std::vector<unsigned>&);
 
 private:
   unsigned calcIndex(double) const;

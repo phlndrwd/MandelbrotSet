@@ -24,25 +24,16 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 }
 
-void drawFractal(const unsigned& width, const unsigned& height, std::vector<Colour>& image) {
+void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
   InitWindow(width, height, "Raylib Test");
-  Image fracImage = GenImageColor(width, height, WHITE);  // Create offscreen image
-  for (unsigned j = 0; j < height; j++) {
-    for (unsigned i = 0; i < width; i++) {
-      const Colour& pixel = image[j * height + i];
-      Color rayCol(pixel.getR(), pixel.getG(), pixel.getB(), 255);
-      ImageDrawPixel(&fracImage, i, j, rayCol);
-    }
-  }
-  Texture2D fracTexture = LoadTextureFromImage(fracImage);  // Image converted and uploaded to GPU memory (VRAM)
-  UnloadImage(fracImage);  // Converted image can be unloaded from RAM
-  SetTargetFPS(60);
   while (WindowShouldClose() == false) {
+    SetTargetFPS(60);
+    Texture2D texture = LoadTextureFromImage(image); // Image converted and uploaded to GPU memory (VRAM)
+    //UnloadImage(image); // Converted image can be unloaded from RAM
     BeginDrawing();
-      DrawTexture(fracTexture, 0, 0, WHITE);
+      DrawTexture(texture, 0, 0, WHITE);
     EndDrawing();
   }
-  UnloadTexture(fracTexture);
   CloseWindow();
 }
 
@@ -70,7 +61,7 @@ int main() {
 
     std::cout << "Initialising variables..." << std::endl;
     std::vector<unsigned> data(width * height, 0);
-    std::vector<Colour> image(width * height);
+    Image image = GenImageColor(width, height, BLACK);
 
     std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
               << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
@@ -82,11 +73,11 @@ int main() {
 
     drawFractal(width, height, image);
 
-    ImageWriter imageWriter;
-    std::cout << "Writing " << imagePath << " to disk..." << std::endl;
-    if (imageWriter.toPPM(image, imagePath, width, height) == false) {
-      std::cout << "No image file produced." << std::endl;
-    }
+    // ImageWriter imageWriter;
+    // std::cout << "Writing " << imagePath << " to disk..." << std::endl;
+    // if (imageWriter.toPPM(image, imagePath, width, height) == false) {
+    //   std::cout << "No image file produced." << std::endl;
+    // }
     std::cout << "Time taken = " << omp_get_wtime() - startTime << "seconds." << std::endl;
 
   }

@@ -14,12 +14,12 @@ class ColourMaps {
 public:
   ColourMaps();
 
-  Colour getBlackBody(const unsigned&);
-  Colour getCoolWarm(const unsigned&);
-  Colour getGreyscale(const unsigned&);
-  Colour getPlasma(const unsigned&);
-  Colour getTurbo(const unsigned&);
-  Colour getViridis(const unsigned&);
+  const Colour getBlackBody(const unsigned&);
+  const Colour getCoolWarm(const unsigned&);
+  const Colour getGreyscale(const unsigned&);
+  const Colour getPlasma(const unsigned&);
+  const Colour getTurbo(const unsigned&);
+  const Colour getViridis(const unsigned&);
 
 private:
   std::array<Colour, consts::kNumberOfColours> blackBody_ =
