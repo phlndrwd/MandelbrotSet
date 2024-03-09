@@ -29,11 +29,11 @@ void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
   while (WindowShouldClose() == false) {
     SetTargetFPS(60);
     Texture2D texture = LoadTextureFromImage(image); // Image converted and uploaded to GPU memory (VRAM)
-    //UnloadImage(image); // Converted image can be unloaded from RAM
     BeginDrawing();
       DrawTexture(texture, 0, 0, WHITE);
     EndDrawing();
   }
+  UnloadImage(image); // Converted image can be unloaded from RAM
   CloseWindow();
 }
 
