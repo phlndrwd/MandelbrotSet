@@ -26,9 +26,9 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 
 void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
   InitWindow(width, height, "Raylib Test");
+  Texture2D texture = LoadTextureFromImage(image); // Image converted and uploaded to GPU memory (VRAM)
   while (WindowShouldClose() == false) {
     SetTargetFPS(60);
-    Texture2D texture = LoadTextureFromImage(image); // Image converted and uploaded to GPU memory (VRAM)
     BeginDrawing();
       DrawTexture(texture, 0, 0, WHITE);
     EndDrawing();
