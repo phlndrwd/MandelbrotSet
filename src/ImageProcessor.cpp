@@ -10,31 +10,31 @@ ImageProcessor::ImageProcessor(const unsigned& width, const unsigned& height,
     case enums::eBlackBody: {
         colourFunc_ = [&](unsigned index) { return colourMaps_.getBlackBody(index); };
         break;
-      }
+    }
     case enums::eCoolWarm: {
         colourFunc_ = [&](unsigned index) { return colourMaps_.getCoolWarm(index); };
         break;
-      }
+    }
     case enums::eGreyScale: {
         colourFunc_ = [&](unsigned index) { return colourMaps_.getGreyscale(index); };
         break;
-      }
+    }
     case enums::ePlasma: {
         colourFunc_ = [&](unsigned index) { return colourMaps_.getPlasma(index); };
         break;
-      }
+    }
     case enums::eTurbo: {
         colourFunc_ = [&](unsigned index) { return colourMaps_.getTurbo(index); };
         break;
-      }
+    }
     case enums::eViridis: {
         colourFunc_ = [&](unsigned index) { return colourMaps_.getViridis(index); };
         break;
-      }
+    }
     default: {
         colourFunc_ = [&](unsigned index) { return colourMaps_.getCoolWarm(index); };
         break;
-      }
+    }
   }
 }
 

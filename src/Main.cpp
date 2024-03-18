@@ -6,11 +6,10 @@
 #include <string>
 #include <vector>
 
-#include "raylib.h"
+#include "raylib-cpp.hpp"
 
 #include "FileReader.h"
 #include "ImageProcessor.h"
-#include "ImageWriter.h"
 #include "MandelbrotSet.h"
 
 namespace {
@@ -25,16 +24,39 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 
 void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
-  InitWindow(width, height, "Raylib Test");
-  Texture2D texture = LoadTextureFromImage(image); // Image converted and uploaded to GPU memory (VRAM)
-  while (WindowShouldClose() == false) {
-    SetTargetFPS(60);
-    BeginDrawing();
-      DrawTexture(texture, 0, 0, WHITE);
-    EndDrawing();
+  raylib::Window window(width, height, "Mandelbrot Set");
+  raylib::Texture2D texture(image);
+
+  raylib::Vector2 startZoom(0, 0);
+  raylib::Vector2 currentZoom(0, 0);
+
+  int zoomWidth = 0;
+  int zoomHeight = 0;
+  bool mouseDown = false;
+
+  SetTargetFPS(60);
+  while (window.ShouldClose()== false) {
+    if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+      startZoom = GetMousePosition();
+      mouseDown = true;
+    }
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+      currentZoom = GetMousePosition();
+      zoomWidth = currentZoom.x - startZoom.x;
+      zoomHeight = currentZoom.y - startZoom.y;
+    }
+    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+      mouseDown = false;
+    }
+    window.BeginDrawing();
+      texture.Draw(0, 0, WHITE);
+      if (mouseDown == true) {
+        DrawRectangleLines(startZoom.x, startZoom.y, zoomWidth, zoomHeight, WHITE);
+      }
+    window.EndDrawing();
   }
-  UnloadImage(image); // Converted image can be unloaded from RAM
-  CloseWindow();
+  window.Close();
+
 }
 
 int main() {
@@ -79,7 +101,6 @@ int main() {
     //   std::cout << "No image file produced." << std::endl;
     // }
     std::cout << "Time taken = " << omp_get_wtime() - startTime << "seconds." << std::endl;
-
   }
   return 0;
 }
