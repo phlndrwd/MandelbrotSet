@@ -32,10 +32,12 @@ void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
 
   int zoomWidth = 0;
   int zoomHeight = 0;
+
   bool mouseDown = false;
 
   SetTargetFPS(60);
   while (window.ShouldClose()== false) {
+    // Respond to and process mouse events
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
       startZoom = GetMousePosition();
       mouseDown = true;
@@ -48,6 +50,7 @@ void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
       mouseDown = false;
     }
+    // Draw graphics
     window.BeginDrawing();
       texture.Draw(0, 0, WHITE);
       if (mouseDown == true) {
@@ -55,8 +58,9 @@ void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
       }
     window.EndDrawing();
   }
+  // Gracefully exit
+  texture.Unload();
   window.Close();
-
 }
 
 int main() {
