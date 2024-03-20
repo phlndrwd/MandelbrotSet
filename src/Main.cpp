@@ -28,7 +28,7 @@ void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
   raylib::Texture2D texture(image);
 
   raylib::Vector2 startZoom(0, 0);
-  raylib::Vector2 currentZoom(0, 0);
+  raylib::Vector2 absZoom(0, 0);
 
   int zoomWidth = 0;
   int zoomHeight = 0;
@@ -40,12 +40,24 @@ void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
     // Respond to and process mouse events
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
       startZoom = GetMousePosition();
+      absZoom.x = startZoom.x;
+      absZoom.y = startZoom.y;
       mouseDown = true;
     }
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-      currentZoom = GetMousePosition();
+      absZoom.x = startZoom.x;
+      absZoom.y = startZoom.y;
+      raylib::Vector2 currentZoom = GetMousePosition();
       zoomWidth = currentZoom.x - startZoom.x;
+      if (zoomWidth < 0) {
+        zoomWidth = startZoom.x - currentZoom.x;
+        absZoom.x = currentZoom.x;
+      }
       zoomHeight = currentZoom.y - startZoom.y;
+      if (zoomHeight < 0) {
+        zoomHeight = startZoom.y - currentZoom.y;
+        absZoom.y = currentZoom.y;
+      }
     }
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
       mouseDown = false;
@@ -54,7 +66,7 @@ void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
     window.BeginDrawing();
       texture.Draw(0, 0, WHITE);
       if (mouseDown == true) {
-        DrawRectangleLines(startZoom.x, startZoom.y, zoomWidth, zoomHeight, WHITE);
+        DrawRectangleLines(absZoom.x, absZoom.y, zoomWidth, zoomHeight, WHITE);
       }
     window.EndDrawing();
   }
@@ -91,10 +103,10 @@ int main() {
 
     std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
               << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
-    MandelbrotSet mandelbrotSet(width, height, maxIter, threshold);
+    MandelbrotSet mandelbrotSet(width, height, maxIter, xMin, xMax, yMin, yMax, threshold);
     ImageProcessor imageProcessor(width, height, 0, maxIter, colourMapOptIndex, colourInvert);
 
-    mandelbrotSet.run(xMin, xMax, yMin, yMax, data);
+    mandelbrotSet.run(0, width, 0, height, data);
     imageProcessor.toImage(image, data);
 
     drawFractal(width, height, image);

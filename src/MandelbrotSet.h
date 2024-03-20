@@ -5,12 +5,13 @@
 
 class MandelbrotSet {
 public:
-  MandelbrotSet(const unsigned&, const unsigned&, const unsigned&, const double&);
+  MandelbrotSet(const unsigned&, const unsigned&, const unsigned&, const double&,
+                const double&, const double&, const double&, const double&);
 
-  void run(const double&, const double&, const double&, const double&, std::vector<unsigned>&);
+  void run(const unsigned&, const unsigned&, const unsigned&, const unsigned&, std::vector<unsigned>&);
 
 private:
-  void calcAxes(const double&, const double&, const double&, const double&);
+  void calcAxes(const unsigned&, const unsigned&, const unsigned&, const unsigned&);
   const double calcIncrement(const double&, const double&, const unsigned&) const;
   void iterate(std::vector<unsigned>&) const;
 
@@ -21,6 +22,10 @@ private:
   const unsigned height_;
   const unsigned maxIter_;
 
+  const double xMin_;
+  const double xMax_;
+  const double yMin_;
+  const double yMax_;
   const double threshold_;
 };
 
