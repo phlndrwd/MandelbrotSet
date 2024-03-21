@@ -9,7 +9,6 @@
 #include "raylib-cpp.hpp"
 
 #include "FileReader.h"
-#include "ImageProcessor.h"
 #include "MandelbrotSet.h"
 
 namespace {
@@ -23,7 +22,10 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 }
 
-void drawFractal(const unsigned& width, const unsigned& height, Image& image) {
+void drawFractal(const unsigned& width, const unsigned& height, MandelbrotSet& mandelbrotSet, Image& image) {
+
+  mandelbrotSet.run(0, width, 0, height, image);
+
   raylib::Window window(width, height, "Mandelbrot Set");
   raylib::Texture2D texture(image);
 
@@ -98,18 +100,12 @@ int main() {
     }
 
     std::cout << "Initialising variables..." << std::endl;
-    std::vector<unsigned> data(width * height, 0);
     Image image = GenImageColor(width, height, BLACK);
 
     std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
               << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
-    MandelbrotSet mandelbrotSet(width, height, maxIter, xMin, xMax, yMin, yMax, threshold);
-    ImageProcessor imageProcessor(width, height, 0, maxIter, colourMapOptIndex, colourInvert);
-
-    mandelbrotSet.run(0, width, 0, height, data);
-    imageProcessor.toImage(image, data);
-
-    drawFractal(width, height, image);
+    MandelbrotSet mandelbrotSet(width, height, maxIter, xMin, xMax, yMin, yMax, threshold, colourMapOptIndex, colourInvert);
+    drawFractal(width, height, mandelbrotSet, image);
 
     // ImageWriter imageWriter;
     // std::cout << "Writing " << imagePath << " to disk..." << std::endl;

@@ -11,8 +11,7 @@
 
 class ImageProcessor {
 public:
-  ImageProcessor(const unsigned&, const unsigned&, const unsigned&, const unsigned&,
-                 const int& colourMapOptIndex, const bool& invert);
+  ImageProcessor(const unsigned&, const unsigned&, const unsigned&, const unsigned&, const int&, const bool&);
   void toImage(Image&, const std::vector<unsigned>&);
 
 private:

@@ -8,15 +8,16 @@
 
 MandelbrotSet::MandelbrotSet(const unsigned& width, const unsigned& height, const unsigned& maxIter,
 			     const double& xMin, const double& xMax, const double& yMin, const double& yMax,
-			     const double& threshold) :
-    xAxis_(width, 0), yAxis_(height, 0), width_(width), height_(height), maxIter_(maxIter),
+			     const double& threshold, const int& colourMapOptIndex, const bool& invert) :
+    xAxis_(width, 0), yAxis_(height, 0), width_(width), data_(width * height, 0),
+    imageProcessor_(width, height, 0, maxIter, colourMapOptIndex, invert), height_(height), maxIter_(maxIter),
     xMin_(xMin), xMax_(xMax), yMin_(yMin), yMax_(yMax), threshold_(threshold) {}
 
 void MandelbrotSet::run(const unsigned& xMinIdx, const unsigned& xMaxIdx,
-			const unsigned& yMinIdx, const unsigned& yMaxIdx,
-			std::vector<unsigned>& data) {
+                        const unsigned& yMinIdx, const unsigned& yMaxIdx, Image& image) {
   calcAxes(xMinIdx, xMaxIdx, yMinIdx, yMaxIdx);
-  iterate(data);
+  iterate();
+  imageProcessor_.toImage(image, data_);
 }
 
 void MandelbrotSet::calcAxes(const unsigned& xMinIdx, const unsigned& xMaxIdx,
@@ -39,8 +40,8 @@ const double MandelbrotSet::calcIncrement(const double& max, const double& min, 
   return inc;
 }
 
-void MandelbrotSet::iterate(std::vector<unsigned>& data) const {
-#pragma omp parallel for default(none) shared(maxIter_, threshold_, data) schedule(static, 1)
+void MandelbrotSet::iterate() {
+#pragma omp parallel for default(none) shared(maxIter_, threshold_, data_) schedule(static, 1)
   for (unsigned j = 0; j < height_; j++) {
     double y = yAxis_[j];
     for (unsigned i = 0; i < width_; i++) {
@@ -55,7 +56,7 @@ void MandelbrotSet::iterate(std::vector<unsigned>& data) const {
         }
       }
       unsigned index = j * height_ + i;
-      data[index] = iter;
+      data_[index] = iter;
     }
   }
 }
