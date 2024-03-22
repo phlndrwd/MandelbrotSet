@@ -11,19 +11,17 @@
 
 class ImageProcessor {
 public:
-  ImageProcessor(const unsigned&, const unsigned&, const unsigned&, const unsigned&, const int&, const bool&);
-  void toImage(Image&, const std::vector<unsigned>&);
+  ImageProcessor(const unsigned&, const unsigned&, const int&, const bool&);
+  void toImage(Image&, const std::vector<unsigned>&, const unsigned&, const unsigned&);
 
 private:
-  unsigned calcIndex(double) const;
+  unsigned calcIndex(double, const unsigned&, const unsigned&) const;
   std::function<Colour(unsigned)> colourFunc_;
 
   ColourMaps colourMaps_;
 
   const unsigned width_;
   const unsigned height_;
-  const unsigned min_;
-  const unsigned max_;
   const int colourMapOptIndex_;
   const bool invert_;
 };

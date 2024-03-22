@@ -102,7 +102,6 @@ int main() {
     if (colourMapOptIndex == -1) {
       std::cout << "Error: Colour map option \"" << colourMapOption << "\" is not valid. Using default..." << std::endl;
     }
-
     std::cout << "Initialising variables..." << std::endl;
     Image image = GenImageColor(width, height, BLACK);
 
@@ -112,6 +111,7 @@ int main() {
                                 threshold, colourMapOptIndex, colourInvert, image);
     drawFractal(width, height, mandelbrotSet, image);
 
+    // Temporarily disabled file writing
     // ImageWriter imageWriter;
     // std::cout << "Writing " << imagePath << " to disk..." << std::endl;
     // if (imageWriter.toPPM(image, imagePath, width, height) == false) {

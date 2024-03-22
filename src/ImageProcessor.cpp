@@ -3,9 +3,8 @@
 #include <cmath>
 
 ImageProcessor::ImageProcessor(const unsigned& width, const unsigned& height,
-			       const unsigned& min, const unsigned& max,
 			       const int& colourMapOptIndex, const bool& invert) :
-    width_(width), height_(height), min_(min), max_(max), colourMapOptIndex_(colourMapOptIndex), invert_(invert) {
+    width_(width), height_(height), colourMapOptIndex_(colourMapOptIndex), invert_(invert) {
   switch (colourMapOptIndex_) {
     case enums::eBlackBody: {
         colourFunc_ = [&](unsigned index) { return colourMaps_.getBlackBody(index); };
@@ -38,26 +37,26 @@ ImageProcessor::ImageProcessor(const unsigned& width, const unsigned& height,
   }
 }
 
-void ImageProcessor::toImage(Image& image, const std::vector<unsigned>& data) {
+void ImageProcessor::toImage(Image& image, const std::vector<unsigned>& data, const unsigned& min, const unsigned& max) {
   for (unsigned j = 0; j < height_; j++) {
     for (unsigned i = 0; i < width_; i++) {
       unsigned index = j * height_ + i;
-      const Colour& pixel = colourFunc_(calcIndex(data[index]));
+      const Colour& pixel = colourFunc_(calcIndex(data[index], min, max));
       Color color(pixel.getR(), pixel.getG(), pixel.getB(), 255);  // Alpha is hard-coded opaque.
       ImageDrawPixel(&image, i, j, color);
     }
   }
 }
 
-unsigned ImageProcessor::calcIndex(double value) const {
-  if (value < min_) {
-    value = min_;
-  } else if (value > max_) {
-    value = max_;
+unsigned ImageProcessor::calcIndex(double value, const unsigned& min, const unsigned& max) const {
+  if (value < min) {
+    value = min;
+  } else if (value > max) {
+    value = max;
   }
   if (invert_) {
-    value = max_ - value;
+    value = max - value;
   }
-  double fracVal = value / (max_ - min_);
+  double fracVal = (value - min) / (max - min);
   return std::round(fracVal * (consts::kNumberOfColours - 1));
 }

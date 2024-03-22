@@ -15,11 +15,11 @@ public:
 
 private:
   void calcAxes(const unsigned&, const unsigned&, const unsigned&, const unsigned&);
-  const double calcIncrement(const double&, const double&, const unsigned&) const;
-  void iterate();
+  const long double calcIncrement(const long double&, const long double&, const unsigned&) const;
+  void iterate(unsigned&, unsigned&);
 
-  std::vector<double> xAxis_;
-  std::vector<double> yAxis_;
+  std::vector<long double> xAxis_;
+  std::vector<long double> yAxis_;
 
   const unsigned width_;
   const unsigned height_;
@@ -29,10 +29,10 @@ private:
 
   const unsigned maxIter_;
 
-  const double xMin_;
-  const double xMax_;
-  const double yMin_;
-  const double yMax_;
+  const long double xMin_;
+  const long double xMax_;
+  const long double yMin_;
+  const long double yMax_;
   const double threshold_;
 };
 

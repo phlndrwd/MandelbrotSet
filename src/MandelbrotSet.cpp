@@ -10,16 +10,16 @@ MandelbrotSet::MandelbrotSet(const unsigned& width, const unsigned& height, cons
 			     const double& xMin, const double& xMax, const double& yMin, const double& yMax,
 			     const double& threshold, const int& colourMapOptIndex, const bool& invert, Image& image) :
     xAxis_(width, 0), yAxis_(height, 0), width_(width), data_(width * height, 0),
-    imageProcessor_(width, height, 0, maxIter, colourMapOptIndex, invert), height_(height), maxIter_(maxIter),
+    imageProcessor_(width, height, colourMapOptIndex, invert), height_(height), maxIter_(maxIter),
     xMin_(xMin), xMax_(xMax), yMin_(yMin), yMax_(yMax), threshold_(threshold) {
   reset(image);  // Calculate default axes and create initial image
 }
 
 void MandelbrotSet::reset(Image& image) {
-  double xInc = calcIncrement(xMin_, xMax_, width_);
-  double yInc = calcIncrement(yMin_, yMax_, height_);
-  const double& xMin = xMin_;
-  const double& yMin = yMin_;
+  long double xInc = calcIncrement(xMin_, xMax_, width_);
+  long double yInc = calcIncrement(yMin_, yMax_, height_);
+  const long double& xMin = xMin_;
+  const long double& yMin = yMin_;
   unsigned n;
   std::generate(std::begin(xAxis_), std::end(xAxis_), [n = 0, &xInc, &xMin] () mutable {
     return (n++ * xInc) + xMin;
@@ -36,19 +36,21 @@ void MandelbrotSet::run(const unsigned& xMinZoomIdx, const unsigned& xZoomWidth,
   unsigned xMaxZoomIdx = xMinZoomIdx + xZoomWidth;
   unsigned yMaxZoomIdx = yMinZoomIdx + yZoomHeight;
   calcAxes(xMinZoomIdx, xMaxZoomIdx, yMinZoomIdx, yMaxZoomIdx);
-  iterate();
-  imageProcessor_.toImage(image, data_);
+  unsigned min =  std::numeric_limits<unsigned>::max();
+  unsigned max = 0;
+  iterate(min, max);
+  imageProcessor_.toImage(image, data_, min, max);
 }
 
 void MandelbrotSet::calcAxes(const unsigned& xMinIdx, const unsigned& xMaxIdx,
                              const unsigned& yMinIdx, const unsigned& yMaxIdx) {
-  double xMin = xAxis_[xMinIdx];
-  double xMax = xAxis_[xMaxIdx];
-  double yMin = yAxis_[yMinIdx];
-  double yMax = yAxis_[yMaxIdx];
+  long double xMin = xAxis_[xMinIdx];
+  long double xMax = xAxis_[xMaxIdx];
+  long double yMin = yAxis_[yMinIdx];
+  long double yMax = yAxis_[yMaxIdx];
 
-  double xInc = calcIncrement(xMin, xMax, width_);
-  double yInc = calcIncrement(yMin, yMax, height_);
+  long double xInc = calcIncrement(xMin, xMax, width_);
+  long double yInc = calcIncrement(yMin, yMax, height_);
 
   unsigned n;
   std::generate(std::begin(xAxis_), std::end(xAxis_), [n = 0, &xInc, &xMin] () mutable {
@@ -59,13 +61,13 @@ void MandelbrotSet::calcAxes(const unsigned& xMinIdx, const unsigned& xMaxIdx,
   });
 }
 
-const double MandelbrotSet::calcIncrement(const double& min, const double& max, const unsigned& size) const {
-  double inc = (max - min) / (double)(size - 1);
+const long double MandelbrotSet::calcIncrement(const long double& min, const long double& max, const unsigned& size) const {
+  long double inc = (max - min) / (long double)(size - 1);
   return inc;
 }
 
-void MandelbrotSet::iterate() {
-#pragma omp parallel for default(none) shared(maxIter_, threshold_, data_) schedule(static, 1)
+void MandelbrotSet::iterate(unsigned& min, unsigned& max) {
+#pragma omp parallel for default(none) shared(maxIter_, min, max, threshold_, data_) schedule(static, 1)
   for (unsigned j = 0; j < height_; j++) {
     double y = yAxis_[j];
     for (unsigned i = 0; i < width_; i++) {
@@ -81,6 +83,11 @@ void MandelbrotSet::iterate() {
       }
       unsigned index = j * height_ + i;
       data_[index] = iter;
+      #pragma omp critical
+      {
+        if (iter < min) min = iter;
+        if (iter > max) max = iter;
+      }
     }
   }
 }
