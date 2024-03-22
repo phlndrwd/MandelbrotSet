@@ -25,7 +25,7 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 void drawFractal(const unsigned& width, const unsigned& height, MandelbrotSet& mandelbrotSet, Image& image) {
   raylib::Window window(width, height, "Mandelbrot Set");
 
-  raylib::Texture2D texture;
+  raylib::Texture2D texture(image);
   raylib::Vector2 startZoom(0, 0);
   raylib::Vector2 absZoom(0, 0);
 
@@ -60,20 +60,17 @@ void drawFractal(const unsigned& width, const unsigned& height, MandelbrotSet& m
     }
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
       mouseDown = false;
-      std::cout << "startZoom.x> " << startZoom.x << ", zoomWidth> " << zoomWidth << ", startZoom.y> " << startZoom.y << ", zoomHeight> " << zoomHeight << std::endl;
       mandelbrotSet.run(startZoom.x, zoomWidth, startZoom.y, zoomHeight, image);
+      texture.Unload();  // Requires unload before load to prevent serious memory leak
+      texture.Load(image);
     }
     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-      std::cout << "RIGHT" << std::endl;
       mandelbrotSet.reset(image);
+      texture.Unload();  // Requires unload before load to prevent serious memory leak
+      texture.Load(image);
     }
-
-    texture.Unload();  // Requires unload before load to prevent serious memory leak
-    texture.Load(image);
     // Draw graphics
     window.BeginDrawing();
-    std::cout << "LOOP" << std::endl;
-
     texture.Draw(0, 0, WHITE);
     if (mouseDown == true) {
       DrawRectangleLines(absZoom.x, absZoom.y, zoomWidth, zoomHeight, WHITE);
