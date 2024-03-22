@@ -8,8 +8,9 @@
 class MandelbrotSet {
 public:
   MandelbrotSet(const unsigned&, const unsigned&, const unsigned&, const double&, const double&,
-                const double&, const double&, const double&, const int&, const bool&);
+                const double&, const double&, const double&, const int&, const bool&, Image& image);
 
+  void reset(Image& image);
   void run(const unsigned&, const unsigned&, const unsigned&, const unsigned&, Image& image);
 
 private:

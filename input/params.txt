@@ -4,8 +4,8 @@ xMin,-2
 xMax,1
 yMin,-1.5
 yMax,1.5
-maxIter,50
-threshold,2
+maxIter,500
+threshold,3
 colourMapOption,turbo
 colourInvert,0
 imagePath,./image.ppm

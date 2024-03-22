@@ -23,12 +23,9 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 
 void drawFractal(const unsigned& width, const unsigned& height, MandelbrotSet& mandelbrotSet, Image& image) {
-
-  mandelbrotSet.run(0, width, 0, height, image);
-
   raylib::Window window(width, height, "Mandelbrot Set");
-  raylib::Texture2D texture(image);
 
+  raylib::Texture2D texture;
   raylib::Vector2 startZoom(0, 0);
   raylib::Vector2 absZoom(0, 0);
 
@@ -63,13 +60,24 @@ void drawFractal(const unsigned& width, const unsigned& height, MandelbrotSet& m
     }
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
       mouseDown = false;
+      std::cout << "startZoom.x> " << startZoom.x << ", zoomWidth> " << zoomWidth << ", startZoom.y> " << startZoom.y << ", zoomHeight> " << zoomHeight << std::endl;
+      mandelbrotSet.run(startZoom.x, zoomWidth, startZoom.y, zoomHeight, image);
     }
+    if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+      std::cout << "RIGHT" << std::endl;
+      mandelbrotSet.reset(image);
+    }
+
+    texture.Unload();  // Requires unload before load to prevent serious memory leak
+    texture.Load(image);
     // Draw graphics
     window.BeginDrawing();
-      texture.Draw(0, 0, WHITE);
-      if (mouseDown == true) {
-        DrawRectangleLines(absZoom.x, absZoom.y, zoomWidth, zoomHeight, WHITE);
-      }
+    std::cout << "LOOP" << std::endl;
+
+    texture.Draw(0, 0, WHITE);
+    if (mouseDown == true) {
+      DrawRectangleLines(absZoom.x, absZoom.y, zoomWidth, zoomHeight, WHITE);
+    }
     window.EndDrawing();
   }
   // Gracefully exit
@@ -78,7 +86,6 @@ void drawFractal(const unsigned& width, const unsigned& height, MandelbrotSet& m
 }
 
 int main() {
-  double startTime = omp_get_wtime();
   std::cout << "Reading parameters..." << std::endl;
   std::map<std::string, std::any> values;
   FileReader fileReader;
@@ -104,7 +111,8 @@ int main() {
 
     std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
               << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
-    MandelbrotSet mandelbrotSet(width, height, maxIter, xMin, xMax, yMin, yMax, threshold, colourMapOptIndex, colourInvert);
+    MandelbrotSet mandelbrotSet(width, height, maxIter, xMin, xMax, yMin, yMax,
+                                threshold, colourMapOptIndex, colourInvert, image);
     drawFractal(width, height, mandelbrotSet, image);
 
     // ImageWriter imageWriter;
@@ -112,7 +120,6 @@ int main() {
     // if (imageWriter.toPPM(image, imagePath, width, height) == false) {
     //   std::cout << "No image file produced." << std::endl;
     // }
-    std::cout << "Time taken = " << omp_get_wtime() - startTime << "seconds." << std::endl;
   }
   return 0;
 }
