@@ -22,15 +22,14 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 }
 
-void drawFractal(const unsigned& width, const unsigned& height, MandelbrotSet& mandelbrotSet, Image& image) {
+void drawGraphics(const unsigned& width, const unsigned& height, MandelbrotSet& mandelbrotSet, Image& image) {
   raylib::Window window(width, height, "Mandelbrot Set");
 
   raylib::Texture2D texture(image);
+  raylib::Vector2 initZoom(0, 0);
   raylib::Vector2 startZoom(0, 0);
-  raylib::Vector2 absZoom(0, 0);
 
-  int zoomWidth = 0;
-  int zoomHeight = 0;
+  int zoomSize = 0;
 
   bool mouseDown = false;
 
@@ -38,29 +37,33 @@ void drawFractal(const unsigned& width, const unsigned& height, MandelbrotSet& m
   while (window.ShouldClose()== false) {
     // Respond to and process mouse events
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-      startZoom = GetMousePosition();
-      absZoom.x = startZoom.x;
-      absZoom.y = startZoom.y;
+      initZoom = GetMousePosition();
+      startZoom = initZoom;
       mouseDown = true;
     }
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-      absZoom.x = startZoom.x;
-      absZoom.y = startZoom.y;
+      startZoom = initZoom;
       raylib::Vector2 currentZoom = GetMousePosition();
-      zoomWidth = currentZoom.x - startZoom.x;
+      int zoomWidth = currentZoom.x - initZoom.x;
+      bool setStart = false;
       if (zoomWidth < 0) {
-        zoomWidth = startZoom.x - currentZoom.x;
-        absZoom.x = currentZoom.x;
+        zoomWidth = initZoom.x - currentZoom.x;
+        setStart = true;
       }
-      zoomHeight = currentZoom.y - startZoom.y;
+      int zoomHeight = currentZoom.y - initZoom.y;
       if (zoomHeight < 0) {
-        zoomHeight = startZoom.y - currentZoom.y;
-        absZoom.y = currentZoom.y;
+        zoomHeight = initZoom.y - currentZoom.y;
+        setStart = true;
+      }
+      zoomSize = std::min(zoomWidth, zoomHeight);
+      if (setStart == true) {
+        startZoom.x = initZoom.x - zoomSize;
+        startZoom.y = initZoom.y - zoomSize;
       }
     }
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
       mouseDown = false;
-      mandelbrotSet.run(startZoom.x, zoomWidth, startZoom.y, zoomHeight, image);
+      mandelbrotSet.run(startZoom.x, zoomSize, startZoom.y, zoomSize, image);
       texture.Unload();  // Requires unload before load to prevent serious memory leak
       texture.Load(image);
     }
@@ -73,7 +76,7 @@ void drawFractal(const unsigned& width, const unsigned& height, MandelbrotSet& m
     window.BeginDrawing();
     texture.Draw(0, 0, WHITE);
     if (mouseDown == true) {
-      DrawRectangleLines(absZoom.x, absZoom.y, zoomWidth, zoomHeight, WHITE);
+      DrawRectangleLines(startZoom.x, startZoom.y, zoomSize, zoomSize, WHITE);
     }
     window.EndDrawing();
   }
@@ -109,7 +112,7 @@ int main() {
               << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
     MandelbrotSet mandelbrotSet(width, height, maxIter, xMin, xMax, yMin, yMax,
                                 threshold, colourMapOptIndex, colourInvert, image);
-    drawFractal(width, height, mandelbrotSet, image);
+    drawGraphics(width, height, mandelbrotSet, image);
 
     // Temporarily disabled file writing
     // ImageWriter imageWriter;
