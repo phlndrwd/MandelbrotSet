@@ -71,9 +71,9 @@ void MandelbrotSet::iterate(unsigned& min, unsigned& max) {
   for (unsigned j = 0; j < height_; j++) {
     double y = yAxis_[j];
     for (unsigned i = 0; i < width_; i++) {
-      double x = xAxis_[i];
-      std::complex<double> c(x, y);
-      std::complex<double> z = 0;
+      long double x = xAxis_[i];
+      std::complex<long double> c(x, y);
+      std::complex<long double> z = 0;
       unsigned iter = 0;
       for (iter = 0; iter < maxIter_; iter++) {
         z = z * z + c;
