@@ -23,7 +23,92 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 }
 
-void drawGraphics(MandelbrotSet& mandelbrotSet, ImageWriter& imageWriter, Image& image, std::string& imagePath, const unsigned& width, const unsigned& height) {
+void leftMouseButtonPress(raylib::Vector2& initZoom, raylib::Vector2& startZoom, bool& mouseDown) {
+  initZoom = GetMousePosition();
+  startZoom = initZoom;
+  mouseDown = true;
+}
+
+void leftMouseButtonDown(const raylib::Vector2& initZoom, raylib::Vector2& startZoom, int& zoomSize, bool& mouseDown) {
+  startZoom = initZoom;
+  raylib::Vector2 currentZoom = GetMousePosition();
+  int zoomWidth = currentZoom.x - initZoom.x;
+  bool setStart = false;
+  if (zoomWidth < 0) {
+    zoomWidth = initZoom.x - currentZoom.x;
+    setStart = true;
+  }
+  int zoomHeight = currentZoom.y - initZoom.y;
+  if (zoomHeight < 0) {
+    zoomHeight = initZoom.y - currentZoom.y;
+    setStart = true;
+  }
+  zoomSize = std::min(zoomWidth, zoomHeight);
+  if (setStart == true) {
+    startZoom.x = initZoom.x - zoomSize;
+    startZoom.y = initZoom.y - zoomSize;
+  }
+}
+
+void leftMouseButtonLift(MandelbrotSet& mandelbrotSet, Image& image, raylib::Texture2D& texture,
+                         const raylib::Vector2& startZoom, const int& zoomSize, bool& mouseDown) {
+  mouseDown = false;
+  mandelbrotSet.run(startZoom.x, zoomSize, startZoom.y, zoomSize, image);
+  texture.Unload();  // Requires unload before load to prevent serious memory leak
+  texture.Load(image);
+}
+
+void rightMouseButtonPress(MandelbrotSet& mandelbrotSet, Image& image, raylib::Texture2D& texture) {
+  mandelbrotSet.reset(image);
+  texture.Unload();  // Requires unload before load to prevent serious memory leak
+  texture.Load(image);
+}
+
+void writeToFile(MandelbrotSet& mandelbrotSet, ImageWriter& imageWriter, const std::string& imagePath,
+                 const unsigned& width, const unsigned& height) {
+  std::cout << "Writing " << imagePath << " to disk..." << std::endl;
+  if (imageWriter.toPPM(mandelbrotSet.getImageFile(), imagePath, width, height) == false) {
+    std::cout << "No image file produced." << std::endl;
+  }
+  std::cout << "Writing complete." << std::endl;
+}
+
+void drawZoomBox(const MandelbrotSet& mandelbrotSet, const raylib::Vector2& startZoom, const int& zoomSize,
+                 const unsigned& width, const unsigned& height) {
+  const std::vector<Colour>& imageFile = mandelbrotSet.getImageFile();
+  int startX = startZoom.x;
+  int startY = startZoom.y;
+  int endX = startZoom.x + zoomSize;
+  int endY = startZoom.y + zoomSize;
+
+  for (int i = startX; i < endX; ++i) {
+    unsigned index1 = startY * height + i;
+    unsigned index2 = endY * height + i;
+    Colour colour1 = imageFile[index1];
+    Colour colour2 = imageFile[index2];
+    colour1.invert();
+    colour2.invert();
+    Color color1(colour1.getR(), colour1.getG(), colour1.getB(), 255);  // Alpha is hard-coded opaque
+    Color color2(colour2.getR(), colour2.getG(), colour2.getB(), 255);  // Alpha is hard-coded opaque
+    DrawPixel(i, startY, color1);
+    DrawPixel(i, endY, color2);
+  }
+  for (int j = startY; j < endY; ++j) {
+    unsigned index1 = j * height + startX;
+    unsigned index2 = j * height + endX;
+    Colour colour1 = imageFile[index1];
+    Colour colour2 = imageFile[index2];
+    colour1.invert();
+    colour2.invert();
+    Color color1(colour1.getR(), colour1.getG(), colour1.getB(), 255);  // Alpha is hard-coded opaque
+    Color color2(colour2.getR(), colour2.getG(), colour2.getB(), 255);  // Alpha is hard-coded opaque
+    DrawPixel(startX, j, color1);
+    DrawPixel(endX, j, color2);
+  }
+}
+
+void showWindow(MandelbrotSet& mandelbrotSet, ImageWriter& imageWriter, Image& image,
+                const std::string& imagePath, const unsigned& width, const unsigned& height) {
   raylib::Window window(width, height, "Mandelbrot Set");
 
   raylib::Texture2D texture(image);
@@ -31,90 +116,31 @@ void drawGraphics(MandelbrotSet& mandelbrotSet, ImageWriter& imageWriter, Image&
   raylib::Vector2 startZoom(0, 0);
 
   int zoomSize = 0;
-
   bool mouseDown = false;
 
   SetTargetFPS(60);
   while (window.ShouldClose()== false) {
     // Respond to and process mouse events
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-      initZoom = GetMousePosition();
-      startZoom = initZoom;
-      mouseDown = true;
+      leftMouseButtonPress(initZoom, startZoom, mouseDown);
     }
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-      startZoom = initZoom;
-      raylib::Vector2 currentZoom = GetMousePosition();
-      int zoomWidth = currentZoom.x - initZoom.x;
-      bool setStart = false;
-      if (zoomWidth < 0) {
-        zoomWidth = initZoom.x - currentZoom.x;
-        setStart = true;
-      }
-      int zoomHeight = currentZoom.y - initZoom.y;
-      if (zoomHeight < 0) {
-        zoomHeight = initZoom.y - currentZoom.y;
-        setStart = true;
-      }
-      zoomSize = std::min(zoomWidth, zoomHeight);
-      if (setStart == true) {
-        startZoom.x = initZoom.x - zoomSize;
-        startZoom.y = initZoom.y - zoomSize;
-      }
+      leftMouseButtonDown(initZoom, startZoom, zoomSize, mouseDown);
     }
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-      mouseDown = false;
-      mandelbrotSet.run(startZoom.x, zoomSize, startZoom.y, zoomSize, image);
-      texture.Unload();  // Requires unload before load to prevent serious memory leak
-      texture.Load(image);
+      leftMouseButtonLift(mandelbrotSet, image, texture, startZoom, zoomSize,mouseDown);
     }
     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-      mandelbrotSet.reset(image);
-      texture.Unload();  // Requires unload before load to prevent serious memory leak
-      texture.Load(image);
+      rightMouseButtonPress(mandelbrotSet, image, texture);
     }
     if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)) {
-      std::cout << "Writing " << imagePath << " to disk..." << std::endl;
-      if (imageWriter.toPPM(mandelbrotSet.getImageFile(), imagePath, width, height) == false) {
-        std::cout << "No image file produced." << std::endl;
-      }
-      std::cout << "Writing complete." << std::endl;
+      writeToFile(mandelbrotSet, imageWriter, imagePath, width, height);
     }
     // Draw graphics
     window.BeginDrawing();
     texture.Draw(0, 0, WHITE);
     if (mouseDown == true) {
-      const std::vector<Colour>& imageFile = mandelbrotSet.getImageFile();
-
-      int startX = startZoom.x;
-      int startY = startZoom.y;
-      int endX = startZoom.x + zoomSize;
-      int endY = startZoom.y + zoomSize;
-
-      for (int i = startX; i < endX; ++i) {
-        unsigned index1 = startY * height + i;
-        unsigned index2 = endY * height + i;
-        Colour colour1 = imageFile[index1];
-        Colour colour2 = imageFile[index2];
-        colour1.invert();
-        colour2.invert();
-        Color color1(colour1.getR(), colour1.getG(), colour1.getB(), 255);  // Alpha is hard-coded opaque
-        Color color2(colour2.getR(), colour2.getG(), colour2.getB(), 255);  // Alpha is hard-coded opaque
-        DrawPixel(i, startY, color1);
-        DrawPixel(i, endY, color2);
-      }
-      for (int j = startY; j < endY; ++j) {
-        unsigned index1 = j * height + startX;
-        unsigned index2 = j * height + endX;
-        Colour colour1 = imageFile[index1];
-        Colour colour2 = imageFile[index2];
-        colour1.invert();
-        colour2.invert();
-        Color color1(colour1.getR(), colour1.getG(), colour1.getB(), 255);  // Alpha is hard-coded opaque
-        Color color2(colour2.getR(), colour2.getG(), colour2.getB(), 255);  // Alpha is hard-coded opaque
-        DrawPixel(startX, j, color1);
-        DrawPixel(endX, j, color2);
-      }
+      drawZoomBox(mandelbrotSet, startZoom, zoomSize, width, height);
     }
     window.EndDrawing();
   }
@@ -148,7 +174,7 @@ int main() {
     MandelbrotSet mandelbrotSet(width, height, maxIter, xMin, xMax, yMin, yMax,
                                 threshold, colourMapOptIndex, colourInvert, image);
     ImageWriter imageWriter;
-    drawGraphics(mandelbrotSet, imageWriter, image, imagePath, width, height);
+    showWindow(mandelbrotSet, imageWriter, image, imagePath, width, height);
   }
   return 0;
 }
