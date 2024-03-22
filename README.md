@@ -1,4 +1,4 @@
-&copy; Copyright Phil Underwood 2024
+&copy; Copyright 2024 Phil Underwood 
 
 # MandelbrotSet
 
@@ -24,7 +24,7 @@ make
 Alongside the executable is an `input/` directory containing the `params.txt` file. This file sets the parameters used by MandelbrotSet. See the table below for an explanation of these:
 
 | Parameter Name  | Description                                                                                                                        |
-|-----------------|:----------------------------------------------------------------------------------------------------------------------------------:|
+|:----------------|:-----------------------------------------------------------------------------------------------------------------------------------|
 | width           | Horizontal resolution graphical image.                                                                                             |
 | height          | Vertical resolution of graphical image.                                                                                            |
 | xMin            | Horizontal numerical minimum.                                                                                                      |
@@ -34,8 +34,8 @@ Alongside the executable is an `input/` directory containing the `params.txt` fi
 | maxIter         | Maximum number of algorithm iterations.                                                                                            |
 | threshold       | Arbitrary threshold value to escape the algorithm. Should be greater than 2.                                                       |
 | colourMapOption | String selecting one of the colour maps out of "blackbody", "coolwarm", "greyscale", "plasma", "turbo", or "viridis".              |
-| colourInvert    | An integer used as a boolean to invert ("1") or not invert ("0") the selected colour map.                                          |
-| imagePath       | The absolute or relative path to the image written to disk. Images may be overwritten unless copied or changed from this location. |
+| colourInvert    | Integer used as a boolean to invert ("1") or not invert ("0") the selected colour map.                                          |
+| imagePath       | Absolute or relative path to the image written to disk. Images may be overwritten unless copied or changed from this location. |
 
 ### Mouse Control
-Use the left mouse button to zoon into a section of the fractal image. Press and hold the button to draw a zoom box. The program will generate the image for your zoom selection area. You can save the image to a PPM file with the middle mouse button (not forgetting that the image is overwritten each time). You can reset to the initial zoom level with the right mouse button. Please see a couple of example images in the `examples/` directory. These have been converted to JPEG to save space.
+Use the left mouse button to zoon into a section of the fractal image. Press and hold the button to draw a zoom box. The program will generate the image for your zoom selection area. You can save the image to a PPM file with the middle mouse button (not forgetting that the image is overwritten each time). You can reset to the initial zoom level with the right mouse button. See if you can zoom to the limits of numerical precision! Please see a couple of example images in the `examples/` directory. These have been converted to JPEG to save space, but were derived from PPM files produced by MandelbrotSet.
