@@ -9,6 +9,7 @@
 #include "raylib-cpp.hpp"
 
 #include "FileReader.h"
+#include "ImageWriter.h"
 #include "MandelbrotSet.h"
 
 namespace {
@@ -22,7 +23,7 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 }
 
-void drawGraphics(const unsigned& width, const unsigned& height, MandelbrotSet& mandelbrotSet, Image& image) {
+void drawGraphics(MandelbrotSet& mandelbrotSet, ImageWriter& imageWriter, Image& image, std::string& imagePath, const unsigned& width, const unsigned& height) {
   raylib::Window window(width, height, "Mandelbrot Set");
 
   raylib::Texture2D texture(image);
@@ -72,11 +73,48 @@ void drawGraphics(const unsigned& width, const unsigned& height, MandelbrotSet& 
       texture.Unload();  // Requires unload before load to prevent serious memory leak
       texture.Load(image);
     }
+    if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)) {
+      std::cout << "Writing " << imagePath << " to disk..." << std::endl;
+      if (imageWriter.toPPM(mandelbrotSet.getImageFile(), imagePath, width, height) == false) {
+        std::cout << "No image file produced." << std::endl;
+      }
+      std::cout << "Writing complete." << std::endl;
+    }
     // Draw graphics
     window.BeginDrawing();
     texture.Draw(0, 0, WHITE);
     if (mouseDown == true) {
-      DrawRectangleLines(startZoom.x, startZoom.y, zoomSize, zoomSize, WHITE);
+      const std::vector<Colour>& imageFile = mandelbrotSet.getImageFile();
+
+      int startX = startZoom.x;
+      int startY = startZoom.y;
+      int endX = startZoom.x + zoomSize;
+      int endY = startZoom.y + zoomSize;
+
+      for (int i = startX; i < endX; ++i) {
+        unsigned index1 = startY * height + i;
+        unsigned index2 = endY * height + i;
+        Colour colour1 = imageFile[index1];
+        Colour colour2 = imageFile[index2];
+        colour1.invert();
+        colour2.invert();
+        Color color1(colour1.getR(), colour1.getG(), colour1.getB(), 255);  // Alpha is hard-coded opaque
+        Color color2(colour2.getR(), colour2.getG(), colour2.getB(), 255);  // Alpha is hard-coded opaque
+        DrawPixel(i, startY, color1);
+        DrawPixel(i, endY, color2);
+      }
+      for (int j = startY; j < endY; ++j) {
+        unsigned index1 = j * height + startX;
+        unsigned index2 = j * height + endX;
+        Colour colour1 = imageFile[index1];
+        Colour colour2 = imageFile[index2];
+        colour1.invert();
+        colour2.invert();
+        Color color1(colour1.getR(), colour1.getG(), colour1.getB(), 255);  // Alpha is hard-coded opaque
+        Color color2(colour2.getR(), colour2.getG(), colour2.getB(), 255);  // Alpha is hard-coded opaque
+        DrawPixel(startX, j, color1);
+        DrawPixel(endX, j, color2);
+      }
     }
     window.EndDrawing();
   }
@@ -107,19 +145,10 @@ int main() {
     }
     std::cout << "Initialising variables..." << std::endl;
     Image image = GenImageColor(width, height, BLACK);
-
-    std::cout << "Calculating Mandelbrot set with width = " << width << ", height = " << height
-              << ", maxIter = " << maxIter << ", and threshold = " << threshold << "..." << std::endl;
     MandelbrotSet mandelbrotSet(width, height, maxIter, xMin, xMax, yMin, yMax,
                                 threshold, colourMapOptIndex, colourInvert, image);
-    drawGraphics(width, height, mandelbrotSet, image);
-
-    // Temporarily disabled file writing
-    // ImageWriter imageWriter;
-    // std::cout << "Writing " << imagePath << " to disk..." << std::endl;
-    // if (imageWriter.toPPM(image, imagePath, width, height) == false) {
-    //   std::cout << "No image file produced." << std::endl;
-    // }
+    ImageWriter imageWriter;
+    drawGraphics(mandelbrotSet, imageWriter, image, imagePath, width, height);
   }
   return 0;
 }

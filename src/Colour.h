@@ -8,7 +8,7 @@ public:
   Colour();
   explicit Colour(unsigned char, unsigned char, unsigned char);
 
-  Colour invert();
+  void invert();
 
   const unsigned char getR() const;
   const unsigned char getG() const;

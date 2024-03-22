@@ -91,3 +91,7 @@ void MandelbrotSet::iterate(unsigned& min, unsigned& max) {
     }
   }
 }
+
+const std::vector<Colour>& MandelbrotSet::getImageFile() const {
+  return imageProcessor_.getImageFile();
+}

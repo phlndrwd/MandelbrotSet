@@ -12,6 +12,7 @@ public:
 
   void reset(Image& image);
   void run(const unsigned&, const unsigned&, const unsigned&, const unsigned&, Image& image);
+  const std::vector<Colour>& getImageFile() const;
 
 private:
   void calcAxes(const unsigned&, const unsigned&, const unsigned&, const unsigned&);
