@@ -2,4 +2,8 @@ build/
 Debug/
 Release/
 CMakeLists.txt.user
+CMakeCache.txt
+Makefile
+Mandelbrot
+cmake_install.cmake
 *.o
