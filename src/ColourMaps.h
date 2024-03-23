@@ -16,7 +16,8 @@
 #include "Constants.h"
 
 /**
- * @brief Colour maps use 256 colours. Data taken from: https://www.kennethmoreland.com/color-advice/
+ * @brief Colour maps use 256 colours. Data taken from: https://www.kennethmoreland.com/color-advice/ and
+ *        https://blog.research.google/2019/08/turbo-improved-rainbow-colormap-for.html.
  */
 
 class ColourMaps {
@@ -31,7 +32,7 @@ public:
   const Colour getViridis(const unsigned&);
 
 private:
-  std::array<Colour, consts::kNumberOfColours> blackBody_ =
+  std::array<Colour, consts::kColourMapSize> blackBody_ =
     {Colour(0, 0, 0), Colour(3, 1, 1), Colour(7, 2, 1), Colour(10, 3, 2),
     Colour(13, 4, 2), Colour(16, 5, 3), Colour(18, 6, 3), Colour(20, 7, 4),
     Colour(22, 8, 4), Colour(24, 9, 5), Colour(26, 10, 5), Colour(27, 11, 6),
@@ -97,7 +98,7 @@ private:
     Colour(253, 249, 210), Colour(254, 249, 216), Colour(254, 250, 223), Colour(254, 251, 229),
     Colour(255, 252, 236), Colour(255, 253, 242), Colour(255, 254, 249), Colour(255, 255, 255)};
 
-  std::array<Colour, consts::kNumberOfColours> coolWarm_ =
+  std::array<Colour, consts::kColourMapSize> coolWarm_ =
     {Colour(59, 76, 192), Colour(60, 78, 194), Colour(61, 80, 195), Colour(62, 81, 197),
     Colour(63, 83, 199), Colour(64, 85, 200), Colour(66, 87, 202), Colour(67, 88, 203),
     Colour(68, 90, 204), Colour(69, 92, 206), Colour(70, 94, 207), Colour(72, 95, 209),
@@ -163,7 +164,7 @@ private:
     Colour(191, 37, 46), Colour(189, 34, 45), Colour(188, 30, 44), Colour(186, 26, 43),
     Colour(185, 22, 41), Colour(183, 17, 40), Colour(182, 11, 39), Colour(180, 4, 38)};
 
-  std::array<Colour, consts::kNumberOfColours> plasma_ =
+  std::array<Colour, consts::kColourMapSize> plasma_ =
     {Colour(13, 8, 135), Colour(16, 7, 136), Colour(19, 7, 137), Colour(22, 7, 138),
     Colour(25, 6, 140), Colour(27, 6, 141), Colour(29, 6, 142), Colour(32, 6, 143),
     Colour(34, 6, 144), Colour(36, 6, 145), Colour(38, 5, 145), Colour(40, 5, 146),
@@ -229,7 +230,7 @@ private:
     Colour(244, 237, 39), Colour(243, 238, 39), Colour(243, 240, 39), Colour(242, 242, 39),
     Colour(241, 244, 38), Colour(241, 245, 37), Colour(240, 247, 36), Colour(240, 249, 33)};
 
-  std::array<Colour, consts::kNumberOfColours> turbo_ =
+  std::array<Colour, consts::kColourMapSize> turbo_ =
     {Colour(48, 18, 59), Colour(50, 21, 67), Colour(51, 24, 74), Colour(52, 27, 81),
     Colour(53, 30, 88), Colour(54, 33, 95), Colour(55, 36, 102), Colour(56, 39, 109),
     Colour(57, 42, 115), Colour(58, 45, 121), Colour(59, 47, 128), Colour(60, 50, 134),
@@ -295,7 +296,7 @@ private:
     Colour(146, 11, 1), Colour(142, 10, 1), Colour(139, 9, 2), Colour(136, 8, 2),
     Colour(133, 7, 2), Colour(129, 6, 2), Colour(126, 5, 2), Colour(122, 4, 3)};
 
-  std::array<Colour, consts::kNumberOfColours> viridis_ =
+  std::array<Colour, consts::kColourMapSize> viridis_ =
     {Colour(68, 1, 84), Colour(68, 2, 86), Colour(69, 4, 87), Colour(69, 5, 89),
     Colour(70, 7, 90), Colour(70, 8, 92), Colour(70, 10, 93), Colour(70, 11, 94),
     Colour(71, 13, 96), Colour(71, 14, 97), Colour(71, 16, 99), Colour(71, 17, 100),

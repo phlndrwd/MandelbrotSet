@@ -52,7 +52,7 @@ void ImageProcessor::toImage(Image& image, const std::vector<unsigned>& data, co
       unsigned index = j * height_ + i;
       const Colour& pixel = colourFunc_(calcIndex(data[index], min, max));
       imageFile_[index] = pixel;
-      Color color(pixel.getR(), pixel.getG(), pixel.getB(), 255);  // Alpha is hard-coded opaque.
+      Color color(pixel.getR(), pixel.getG(), pixel.getB(), consts::kColourDepth);  // Alpha is hard-coded opaque.
       ImageDrawPixel(&image, i, j, color);
     }
   }
@@ -68,7 +68,7 @@ unsigned ImageProcessor::calcIndex(double value, const unsigned& min, const unsi
     value = max - value;
   }
   double fracVal = (value - min) / (max - min);
-  return std::round(fracVal * (consts::kNumberOfColours - 1));
+  return std::round(fracVal * (consts::kColourMapSize - 1));
 }
 
 const std::vector<Colour>& ImageProcessor::getImageFile() const {

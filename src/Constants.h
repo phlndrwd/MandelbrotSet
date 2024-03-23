@@ -35,7 +35,8 @@ namespace consts {
 
   const char kSeparator = ',';
 
-  const unsigned kNumberOfColours = 256;
+  const unsigned kColourDepth = 255;
+  const unsigned kColourMapSize = 256;
 
   const unsigned kMaxColourSize = 3;
 

@@ -16,9 +16,9 @@ Colour::Colour(): r_(0), g_(0), b_(0) {}
 Colour::Colour(unsigned char r, unsigned char g, unsigned char b): r_(r), g_(g), b_(b) {}
 
 void Colour::invert() {
-  r_ = 255 - r_;
-  g_ = 255 - g_;
-  b_ = 255 - b_;
+  r_ = consts::kColourDepth - r_;
+  g_ = consts::kColourDepth - g_;
+  b_ = consts::kColourDepth - b_;
 }
 
 const unsigned char Colour::getR() const {

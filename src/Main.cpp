@@ -94,8 +94,8 @@ void drawZoomBox(const MandelbrotSet& mandelbrotSet, const raylib::Vector2& star
     Colour colour2 = imageFile[index2];
     colour1.invert();
     colour2.invert();
-    Color color1(colour1.getR(), colour1.getG(), colour1.getB(), 255);  // Alpha is hard-coded opaque
-    Color color2(colour2.getR(), colour2.getG(), colour2.getB(), 255);  // Alpha is hard-coded opaque
+    Color color1(colour1.getR(), colour1.getG(), colour1.getB(), consts::kColourDepth);  // Alpha is hard-coded opaque
+    Color color2(colour2.getR(), colour2.getG(), colour2.getB(), consts::kColourDepth);  // Alpha is hard-coded opaque
     DrawPixel(i, startY, color1);
     DrawPixel(i, endY, color2);
   }
@@ -106,8 +106,8 @@ void drawZoomBox(const MandelbrotSet& mandelbrotSet, const raylib::Vector2& star
     Colour colour2 = imageFile[index2];
     colour1.invert();
     colour2.invert();
-    Color color1(colour1.getR(), colour1.getG(), colour1.getB(), 255);  // Alpha is hard-coded opaque
-    Color color2(colour2.getR(), colour2.getG(), colour2.getB(), 255);  // Alpha is hard-coded opaque
+    Color color1(colour1.getR(), colour1.getG(), colour1.getB(), consts::kColourDepth);  // Alpha is hard-coded opaque
+    Color color2(colour2.getR(), colour2.getG(), colour2.getB(), consts::kColourDepth);  // Alpha is hard-coded opaque
     DrawPixel(startX, j, color1);
     DrawPixel(endX, j, color2);
   }
@@ -115,7 +115,7 @@ void drawZoomBox(const MandelbrotSet& mandelbrotSet, const raylib::Vector2& star
 
 void showWindow(MandelbrotSet& mandelbrotSet, ImageWriter& imageWriter, Image& image,
                 const std::string& imagePath, const unsigned& width, const unsigned& height) {
-  raylib::Window window(width, height, "Mandelbrot Set");
+  raylib::Window window(width, height, "MandelbrotSet");
 
   raylib::Texture2D texture(image);
   raylib::Vector2 initZoom(0, 0);
@@ -181,6 +181,8 @@ int main() {
                                 threshold, colourMapOptIndex, colourInvert, image);
     ImageWriter imageWriter;
     showWindow(mandelbrotSet, imageWriter, image, imagePath, width, height);
+  } else {
+    std::cout << "Error: Input file reading failed." << std::endl;
   }
   return 0;
 }

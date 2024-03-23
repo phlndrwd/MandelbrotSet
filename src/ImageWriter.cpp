@@ -23,7 +23,7 @@ bool ImageWriter::toPPM(const std::vector<Colour>& image, const std::string& fil
     std::ofstream fileOut(filePath);
     fileOut << "P3" << std::endl;
     fileOut << width << " " << height << std::endl;
-    fileOut << "255" << std::endl;
+    fileOut << consts::kColourDepth << std::endl;
     // The j loop below technically writes the image upside-down, but since the Mandelbrot fractal
     // is vertically symmetrical, this inconsistency was left in to avoid the obvious cache miss.
     unsigned index;
