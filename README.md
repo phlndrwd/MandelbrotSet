@@ -4,9 +4,9 @@
 
 ## Description
 
-MandelbrotSet is a simple program, written in C++ that graphically renders the famous Mandelbrot set fractal. Read the [Wikipedia page](https://en.wikipedia.org/wiki/Mandelbrot_set) for more information on the mathematical concepts and algorithm behind it. The code makes use of [OpenMP](https://www.openmp.org/) for shared-memory parallelisation. The reason being that in its basic form the Mandelbrot algorithm is a perfectly parallelisable problem. The calculation of any given pixel value is independent of any other. 
+MandelbrotSet is written in C++ to graphically render the famous Mandelbrot set fractal. Read the [Wikipedia page](https://en.wikipedia.org/wiki/Mandelbrot_set) for more information on the mathematical concepts and algorithm behind it. The code makes use of [OpenMP](https://www.openmp.org/) for shared-memory parallelisation. The reason being that in its basic form the Mandelbrot algorithm is a perfectly parallelisable problem. The calculation of any given pixel value is independent of any other. 
 
-The program graphics are provided by the [raylib](https://www.raylib.com/) library with its C++ wrapper [raylib-cpp](https://github.com/robloach/raylib-cpp). The available, 256-bit, perceptually uniform colour maps were derived from code and data published by [Anton Mikhailov of Google Research](https://blog.research.google/2019/08/turbo-improved-rainbow-colormap-for.html) and [Kenneth Moreland](https://www.kennethmoreland.com/color-advice/).
+The program graphics are provided by the [raylib](https://www.raylib.com/) library with its C++ wrapper [raylib-cpp](https://github.com/robloach/raylib-cpp). The included perceptually uniform colour maps were derived from code and data published by [Anton Mikhailov of Google Research](https://blog.research.google/2019/08/turbo-improved-rainbow-colormap-for.html) and [Kenneth Moreland](https://www.kennethmoreland.com/color-advice/).
 
 ## Compilation
 You will first need follow the installation instructions for raylib and raylib-cpp. Ensure the raylib static library is installed in `/usr/local/lib` and headers are copied to `/usr/local/include`. Then run the following commands to clone and build MandelbrotSet:
