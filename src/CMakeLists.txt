@@ -1,3 +1,12 @@
+###############################################################################
+# MandelbrotSet                                                               #
+#                                                                             #
+# (C) Copyright 2024, Phil Underwood. All rights reserved.                    #
+#                                                                             #
+# This software is licensed under the terms of the 3-Clause BSD License       #
+# which can be obtained from https://opensource.org/license/bsd-3-clause/.    #
+###############################################################################
+
 list(APPEND MANDELBROT_SOURCES
   ${CMAKE_CURRENT_LIST_DIR}/Colour.cpp
   ${CMAKE_CURRENT_LIST_DIR}/Colour.h
