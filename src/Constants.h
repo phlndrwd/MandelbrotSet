@@ -1,5 +1,3 @@
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
 /******************************************************************************
 * MandelbrotSet                                                               *
 *                                                                             *
@@ -8,6 +6,9 @@
 * This software is licensed under the terms of the 3-Clause BSD License       *
 * which can be obtained from https://opensource.org/license/bsd-3-clause/.    *
 ******************************************************************************/
+
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #include <string>
 #include <vector>
