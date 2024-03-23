@@ -4,7 +4,7 @@
 
 ## Description
 
-MandelbrotSet is a simple program, written in C++ that graphically renders the famous Mandelbrot set fractal. Read the [Wikipedia page]((https://en.wikipedia.org/wiki/Mandelbrot_set) for more information on the mathematical concepts and algorithm behind it. The code makes use of [OpenMP](https://www.openmp.org/) for shared-memory parallelisation. The reason being that in its basic form the Mandelbrot algorithm is a perfectly parallelisable problem. The calculation of any given pixel value is independent from any other. 
+MandelbrotSet is a simple program, written in C++ that graphically renders the famous Mandelbrot set fractal. Read the [Wikipedia page](https://en.wikipedia.org/wiki/Mandelbrot_set) for more information on the mathematical concepts and algorithm behind it. The code makes use of [OpenMP](https://www.openmp.org/) for shared-memory parallelisation. The reason being that in its basic form the Mandelbrot algorithm is a perfectly parallelisable problem. The calculation of any given pixel value is independent of any other. 
 
 The program graphics are provided by the [raylib](https://www.raylib.com/) library with its C++ wrapper [raylib-cpp](https://github.com/robloach/raylib-cpp). The available, 256-bit, perceptually uniform colour maps were derived from code and data published by [Anton Mikhailov of Google Research](https://blog.research.google/2019/08/turbo-improved-rainbow-colormap-for.html) and [Kenneth Moreland](https://www.kennethmoreland.com/color-advice/).
 
@@ -25,17 +25,17 @@ Alongside the executable is an `input/` directory containing the `params.txt` fi
 
 | Parameter Name  | Description                                                                                                                        |
 |:----------------|:-----------------------------------------------------------------------------------------------------------------------------------|
-| width           | Horizontal resolution graphical image.                                                                                             |
+| width           | Horizontal resolution of graphical image.                                                                                          |
 | height          | Vertical resolution of graphical image.                                                                                            |
 | xMin            | Horizontal numerical minimum.                                                                                                      |
 | xMax            | Horizontal numerical maximum.                                                                                                      |
 | yMin            | Vertical numerical minimum.                                                                                                        |
 | yMax            | Vertical numerical maximum.                                                                                                        |
 | maxIter         | Maximum number of algorithm iterations.                                                                                            |
-| threshold       | Arbitrary threshold value to escape the algorithm. Should be greater than 2.                                                       |
+| threshold       | Arbitrary threshold value to escape the algorithm. Should be no smaller than 2.                                                    |
 | colourMapOption | String selecting one of the colour maps out of "blackbody", "coolwarm", "greyscale", "plasma", "turbo", or "viridis".              |
-| colourInvert    | Integer used as a boolean to invert ("1") or not invert ("0") the selected colour map.                                          |
-| imagePath       | Absolute or relative path to the image written to disk. Images may be overwritten unless copied or changed from this location. |
+| colourInvert    | Integer used as a boolean to invert ("1") or not invert ("0") the selected colour map.                                             |
+| imagePath       | Absolute or relative path to the image written to disk. Images may be overwritten unless copied or changed from this location.     |
 
 ### Mouse Control
-Use the left mouse button to zoon into a section of the fractal image. Press and hold the button to draw a zoom box. The program will generate the image for your zoom selection area. You can save the image to a PPM file with the middle mouse button (not forgetting that the image is overwritten each time). You can reset to the initial zoom level with the right mouse button. See if you can zoom to the limits of numerical precision! Please see a couple of example images in the `examples/` directory. These have been converted to JPEG to save space, but were derived from PPM files produced by MandelbrotSet.
+Use the left mouse button to zoom into a section of the fractal image. Press and hold the button to draw a box around the area you wish to zoom into. Once the button is released the program will generate the image for your zoom selection area. You can save the image to a PPM file with the middle mouse button (not forgetting that the image is overwritten each time). You can reset to the initial zoom level with the right mouse button. See if you can zoom to the limits of numerical precision! The fractal itself theoretically extends well beyond this. Please see a couple of example images in the `examples/` directory. These have been converted to JPEG images to save space, but were derived from PPM files produced by MandelbrotSet.
