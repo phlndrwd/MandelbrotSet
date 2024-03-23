@@ -29,13 +29,13 @@ int findPosInVector(std::vector<std::string> vector, std::string searchTerm) {
 }
 }
 
-void leftMouseButtonPress(raylib::Vector2& initZoom, raylib::Vector2& startZoom, bool& mouseDown) {
+void startZoomBox(raylib::Vector2& initZoom, raylib::Vector2& startZoom, bool& mouseDown) {
   initZoom = GetMousePosition();
   startZoom = initZoom;
   mouseDown = true;
 }
 
-void leftMouseButtonDown(const raylib::Vector2& initZoom, raylib::Vector2& startZoom, int& zoomSize, bool& mouseDown) {
+void extendZoomBox(const raylib::Vector2& initZoom, raylib::Vector2& startZoom, int& zoomSize, bool& mouseDown) {
   startZoom = initZoom;
   raylib::Vector2 currentZoom = GetMousePosition();
   int zoomWidth = currentZoom.x - initZoom.x;
@@ -56,7 +56,7 @@ void leftMouseButtonDown(const raylib::Vector2& initZoom, raylib::Vector2& start
   }
 }
 
-void leftMouseButtonLift(MandelbrotSet& mandelbrotSet, Image& image, raylib::Texture2D& texture,
+void applyZoom(MandelbrotSet& mandelbrotSet, Image& image, raylib::Texture2D& texture,
                          const raylib::Vector2& startZoom, const int& zoomSize, bool& mouseDown) {
   mouseDown = false;
   mandelbrotSet.run(startZoom.x, zoomSize, startZoom.y, zoomSize, image);
@@ -64,7 +64,7 @@ void leftMouseButtonLift(MandelbrotSet& mandelbrotSet, Image& image, raylib::Tex
   texture.Load(image);
 }
 
-void rightMouseButtonPress(MandelbrotSet& mandelbrotSet, Image& image, raylib::Texture2D& texture) {
+void resetZoomLevel(MandelbrotSet& mandelbrotSet, Image& image, raylib::Texture2D& texture) {
   mandelbrotSet.reset(image);
   texture.Unload();  // Requires unload before load to prevent serious memory leak
   texture.Load(image);
@@ -128,16 +128,16 @@ void showWindow(MandelbrotSet& mandelbrotSet, ImageWriter& imageWriter, Image& i
   while (window.ShouldClose()== false) {
     // Respond to and process mouse events
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-      leftMouseButtonPress(initZoom, startZoom, mouseDown);
+      startZoomBox(initZoom, startZoom, mouseDown);
     }
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-      leftMouseButtonDown(initZoom, startZoom, zoomSize, mouseDown);
+      extendZoomBox(initZoom, startZoom, zoomSize, mouseDown);
     }
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
-      leftMouseButtonLift(mandelbrotSet, image, texture, startZoom, zoomSize,mouseDown);
+      applyZoom(mandelbrotSet, image, texture, startZoom, zoomSize,mouseDown);
     }
     if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-      rightMouseButtonPress(mandelbrotSet, image, texture);
+      resetZoomLevel(mandelbrotSet, image, texture);
     }
     if (IsMouseButtonPressed(MOUSE_BUTTON_MIDDLE)) {
       writeToFile(mandelbrotSet, imageWriter, imagePath, width, height);
