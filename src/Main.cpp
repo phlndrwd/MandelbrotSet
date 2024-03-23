@@ -7,11 +7,8 @@
 * which can be obtained from https://opensource.org/license/bsd-3-clause/.    *
 ******************************************************************************/
 
-#include <omp.h>
-
 #include <any>
 #include <iostream>
-#include <map>
 #include <string>
 #include <vector>
 

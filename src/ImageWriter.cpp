@@ -1,8 +1,3 @@
-#include "ImageWriter.h"
-
-#include <fstream>
-#include <iostream>
-
 /******************************************************************************
 * MandelbrotSet                                                               *
 *                                                                             *
@@ -11,6 +6,11 @@
 * This software is licensed under the terms of the 3-Clause BSD License       *
 * which can be obtained from https://opensource.org/license/bsd-3-clause/.    *
 ******************************************************************************/
+
+#include "ImageWriter.h"
+
+#include <fstream>
+#include <iostream>
 
 #include "Constants.h"
 
