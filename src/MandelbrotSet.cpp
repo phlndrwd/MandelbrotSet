@@ -78,7 +78,7 @@ const long double MandelbrotSet::calcIncrement(const long double& min, const lon
 void MandelbrotSet::iterate(unsigned& min, unsigned& max) {
 #pragma omp parallel for default(none) shared(maxIter_, min, max, threshold_, data_) schedule(static, 1)
   for (unsigned j = 0; j < height_; j++) {
-    double y = yAxis_[j];
+    long double y = yAxis_[j];
     for (unsigned i = 0; i < width_; i++) {
       long double x = xAxis_[i];
       std::complex<long double> c(x, y);
